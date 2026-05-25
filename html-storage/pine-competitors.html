@@ -1,0 +1,307 @@
+
+<h2 style="position:absolute;left:-9999px;">6-site Pine Script tools comparison dashboard, dark theme, Feb–Apr 2026, SimilarWeb.</h2>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body,html{background:#191919;color:#E6E6E5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;}
+.wrap{background:#191919;padding:1rem 0;min-height:400px;}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem;}
+.hdr-title{font-size:13px;font-weight:600;color:#E6E6E5;letter-spacing:.01em;}
+.hdr-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:3px;}
+.chip{font-size:10px;background:#2F2F2F;border:0.5px solid rgba(255,255,255,.08);padding:3px 9px;border-radius:4px;color:rgba(255,255,255,.45);}
+.tabs{display:flex;gap:2px;margin-bottom:1.25rem;border-bottom:0.5px solid rgba(255,255,255,.08);}
+.tab{padding:6px 12px;font-size:11px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);border-bottom:1.5px solid transparent;margin-bottom:-0.5px;transition:color .12s;}
+.tab:hover{color:rgba(255,255,255,.7);}
+.tab.active{color:#E6E6E5;border-bottom-color:#E6E6E5;font-weight:500;}
+.panel{display:none;}.panel.active{display:block;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem;}
+.g6{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:1rem;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;}
+.g32{display:grid;grid-template-columns:repeat(3,1fr) repeat(3,1fr);gap:6px;margin-bottom:1rem;}
+.sc{background:#252525;border:0.5px solid rgba(255,255,255,.07);border-radius:6px;padding:11px 13px;}
+.sc .lbl{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;}
+.sc .val{font-size:16px;font-weight:600;}
+.sc .sub{font-size:10px;margin-top:3px;}
+.sc .desc{font-size:10px;color:rgba(255,255,255,.25);margin-top:2px;}
+.up{color:#4DB896;}.down{color:#E06C4B;}
+.sec{font-size:10px;font-weight:600;color:rgba(255,255,255,.3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;margin-top:4px;}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px;font-size:10px;color:rgba(255,255,255,.4);align-items:center;}
+.dot{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px;flex-shrink:0;}
+.cw{position:relative;width:100%;margin-bottom:1rem;}
+.rtable{width:100%;border-collapse:collapse;font-size:11px;}
+.rtable th{text-align:left;padding:5px 8px;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.3);border-bottom:0.5px solid rgba(255,255,255,.08);font-weight:500;}
+.rtable td{padding:6px 8px;border-bottom:0.5px solid rgba(255,255,255,.05);color:#E6E6E5;}
+.rtable tr:last-child td{border-bottom:none;}
+.rtable tr:hover td{background:rgba(255,255,255,.03);}
+.ins{background:#252525;border-left:2px solid rgba(255,255,255,.15);border-radius:0 5px 5px 0;padding:8px 12px;font-size:11px;color:rgba(255,255,255,.55);margin-bottom:8px;line-height:1.65;}
+.ins strong{color:#E6E6E5;font-weight:500;}
+.badge{display:inline-block;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:500;margin-left:4px;}
+.devbar{height:8px;border-radius:4px;overflow:hidden;display:flex;margin:5px 0;}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem;}
+.btn-q{font-size:10px;padding:5px 10px;border:0.5px solid rgba(255,255,255,.15);border-radius:4px;background:#252525;cursor:pointer;color:rgba(255,255,255,.6);}
+.btn-q:hover{background:#2F2F2F;color:#E6E6E5;}
+</style>
+
+<div class="wrap">
+  <div class="hdr">
+    <div>
+      <div class="hdr-title">
+        <span style="color:#E06C4B;">getpinescript</span> <span style="color:rgba(255,255,255,.2);">·</span>
+        <span style="color:#4DB896;">pineify.app</span> <span style="color:rgba(255,255,255,.2);">·</span>
+        <span style="color:#5B9CF6;">tradesage.co</span> <span style="color:rgba(255,255,255,.2);">·</span>
+        <span style="color:#9B8FEA;">pinescriptwizard</span> <span style="color:rgba(255,255,255,.2);">·</span>
+        <span style="color:#E8A838;">pynesys.io</span> <span style="color:rgba(255,255,255,.2);">·</span>
+        <span style="color:#6DBD6D;">pynecore.org</span>
+      </div>
+      <div class="hdr-sub">SimilarWeb · Feb – Apr 2026 · Worldwide · 6 Pine Script tools</div>
+    </div>
+    <span class="chip">competitive landscape</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="sw('ov',this)">Overview</button>
+    <button class="tab" onclick="sw('tr',this)">Traffic trend</button>
+    <button class="tab" onclick="sw('ge',this)">Geography</button>
+    <button class="tab" onclick="sw('ch',this)">Channels</button>
+    <button class="tab" onclick="sw('en',this)">Engagement</button>
+    <button class="tab" onclick="sw('in',this)">Insights</button>
+  </div>
+
+  <div id="p-ov" class="panel active">
+    <div class="sec">Total visits · 3-month cumulative</div>
+    <div class="g3">
+      <div class="sc" style="border-left:2px solid #4DB896;">
+        <div class="lbl">pineify.app</div>
+        <div class="val" style="color:#4DB896;">394,209</div>
+        <div class="sub down">↓ 29.52% vs prev month</div>
+        <div class="desc">Global #307,272</div>
+      </div>
+      <div class="sc" style="border-left:2px solid #9B8FEA;">
+        <div class="lbl">pinescriptwizard.com</div>
+        <div class="val" style="color:#9B8FEA;">52,474</div>
+        <div class="sub down">↓ 16.70%</div>
+        <div class="desc">Global #1,650,919</div>
+      </div>
+      <div class="sc" style="border-left:2px solid #E06C4B;">
+        <div class="lbl">getpinescript.com</div>
+        <div class="val" style="color:#E06C4B;">36,694</div>
+        <div class="sub up">↑ 42.57%</div>
+        <div class="desc">Global #1,652,243</div>
+      </div>
+      <div class="sc" style="border-left:2px solid #5B9CF6;">
+        <div class="lbl">tradesage.co</div>
+        <div class="val" style="color:#5B9CF6;">24,462</div>
+        <div class="sub up">↑ 60.08%</div>
+        <div class="desc">Global #2,123,823</div>
+      </div>
+      <div class="sc" style="border-left:2px solid #6DBD6D;">
+        <div class="lbl">pynecore.org</div>
+        <div class="val" style="color:#6DBD6D;">13,926</div>
+        <div class="sub up">↑ 8.21%</div>
+        <div class="desc">Global #3,381,062</div>
+      </div>
+      <div class="sc" style="border-left:2px solid #E8A838;">
+        <div class="lbl">pynesys.io</div>
+        <div class="val" style="color:#E8A838;">10,951</div>
+        <div class="sub down">↓ 15.53%</div>
+        <div class="desc">Global #5,104,128</div>
+      </div>
+    </div>
+
+    <div class="sec">Monthly averages</div>
+    <div style="background:#252525;border:0.5px solid rgba(255,255,255,.07);border-radius:6px;overflow:hidden;margin-bottom:1rem;">
+      <table class="rtable" style="width:100%;">
+        <thead><tr>
+          <th>Site</th><th>Monthly visits</th><th>Unique / mo</th><th>Dedup. audience</th><th>Trend</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><span style="color:#4DB896;font-weight:500;">pineify.app</span></td><td>131,403</td><td>69,145</td><td>61,107</td><td><span class="badge" style="background:rgba(231,76,60,.15);color:#E06C4B;">↓ declining</span></td></tr>
+          <tr><td><span style="color:#9B8FEA;font-weight:500;">pinescriptwizard</span></td><td>17,491</td><td>7,881</td><td>6,947</td><td><span class="badge" style="background:rgba(231,76,60,.15);color:#E06C4B;">↓ declining</span></td></tr>
+          <tr><td><span style="color:#E06C4B;font-weight:500;">getpinescript</span></td><td>12,231</td><td>6,035</td><td>5,272</td><td><span class="badge" style="background:rgba(77,184,150,.15);color:#4DB896;">↑ V-shape</span></td></tr>
+          <tr><td><span style="color:#5B9CF6;font-weight:500;">tradesage.co</span></td><td>8,154</td><td>4,112</td><td>3,600</td><td><span class="badge" style="background:rgba(77,184,150,.15);color:#4DB896;">↑ accel.</span></td></tr>
+          <tr><td><span style="color:#6DBD6D;font-weight:500;">pynecore.org</span></td><td>4,642</td><td>2,034</td><td>1,755</td><td><span class="badge" style="background:rgba(77,184,150,.15);color:#4DB896;">↑ steady</span></td></tr>
+          <tr><td><span style="color:#E8A838;font-weight:500;">pynesys.io</span></td><td>3,650</td><td>1,720</td><td>1,501</td><td><span class="badge" style="background:rgba(231,76,60,.15);color:#E06C4B;">↓ declining</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec">Device split (desktop %)</div>
+    <div class="g3">
+      <div class="sc"><div class="lbl" style="color:#4DB896;">pineify.app</div><div class="devbar"><span style="width:49.97%;background:#4DB896;display:block;height:100%;"></span><span style="flex:1;background:#1D5940;display:block;height:100%;"></span></div><div style="font-size:10px;color:rgba(255,255,255,.35);">Desktop 50% · Mobile 50%</div></div>
+      <div class="sc"><div class="lbl" style="color:#6DBD6D;">pynecore.org</div><div class="devbar"><span style="width:56.8%;background:#6DBD6D;display:block;height:100%;"></span><span style="flex:1;background:#2A4A2A;display:block;height:100%;"></span></div><div style="font-size:10px;color:rgba(255,255,255,.35);">Desktop 57% · Mobile 43%</div></div>
+      <div class="sc"><div class="lbl" style="color:#E8A838;">pynesys.io</div><div class="devbar"><span style="width:41.14%;background:#E8A838;display:block;height:100%;"></span><span style="flex:1;background:#4A3A10;display:block;height:100%;"></span></div><div style="font-size:10px;color:rgba(255,255,255,.35);">Desktop 41% · Mobile 59%</div></div>
+      <div class="sc"><div class="lbl" style="color:#5B9CF6;">tradesage.co</div><div class="devbar"><span style="width:39.18%;background:#5B9CF6;display:block;height:100%;"></span><span style="flex:1;background:#1A3060;display:block;height:100%;"></span></div><div style="font-size:10px;color:rgba(255,255,255,.35);">Desktop 39% · Mobile 61%</div></div>
+      <div class="sc"><div class="lbl" style="color:#E06C4B;">getpinescript</div><div class="devbar"><span style="width:37.09%;background:#E06C4B;display:block;height:100%;"></span><span style="flex:1;background:#4A1F10;display:block;height:100%;"></span></div><div style="font-size:10px;color:rgba(255,255,255,.35);">Desktop 37% · Mobile 63%</div></div>
+      <div class="sc"><div class="lbl" style="color:#9B8FEA;">pinescriptwizard</div><div class="devbar"><span style="width:31.36%;background:#9B8FEA;display:block;height:100%;"></span><span style="flex:1;background:#2A2040;display:block;height:100%;"></span></div><div style="font-size:10px;color:rgba(255,255,255,.35);">Desktop 31% · Mobile 69%</div></div>
+    </div>
+  </div>
+
+  <div id="p-tr" class="panel">
+    <div class="legend">
+      <span><span class="dot" style="background:#E06C4B;"></span>getpinescript (×1)</span>
+      <span><span class="dot" style="background:#4DB896;"></span>pineify (÷10)</span>
+      <span><span class="dot" style="background:#5B9CF6;"></span>tradesage (×1)</span>
+      <span><span class="dot" style="background:#9B8FEA;"></span>pinescriptwizard (×1)</span>
+      <span><span class="dot" style="background:#E8A838;"></span>pynesys.io (×1)</span>
+      <span><span class="dot" style="background:#6DBD6D;"></span>pynecore.org (×1)</span>
+    </div>
+    <div class="cw" style="height:260px;"><canvas id="tchart" role="img" aria-label="Monthly visit trends for all 6 sites Feb-Apr 2026.">pineify peaks Mar. getpinescript V-shapes. tradesage accelerates. pynecore steady growth. pynesys declines.</canvas></div>
+  </div>
+
+  <div id="p-ge" class="panel">
+    <div style="background:#252525;border:0.5px solid rgba(255,255,255,.07);border-radius:6px;overflow:hidden;margin-bottom:1rem;">
+      <table class="rtable">
+        <thead><tr><th>Site</th><th>#1 country</th><th>share</th><th>#2 country</th><th>share</th><th>#3 country</th><th>share</th></tr></thead>
+        <tbody>
+          <tr><td><span style="color:#E06C4B;font-weight:500;">getpinescript</span></td><td>🇮🇳 India</td><td style="color:#E06C4B;">41.44%<span class="badge" style="background:rgba(77,184,150,.1);color:#4DB896;">↑236%</span></td><td>🇺🇸 US</td><td>27.84%</td><td>🇨🇦 CA</td><td>7.01%</td></tr>
+          <tr><td><span style="color:#4DB896;font-weight:500;">pineify.app</span></td><td>🇺🇸 US</td><td style="color:#4DB896;">16.77%</td><td>🇮🇳 India</td><td>8.82%</td><td>🇮🇩 ID</td><td>7.88%</td></tr>
+          <tr><td><span style="color:#5B9CF6;font-weight:500;">tradesage</span></td><td>🇺🇸 US</td><td style="color:#5B9CF6;">50.73%</td><td>🇮🇳 India</td><td>22.78%<span class="badge" style="background:rgba(77,184,150,.1);color:#4DB896;">↑178%</span></td><td>🇦🇺 AU</td><td>8.84%</td></tr>
+          <tr><td><span style="color:#9B8FEA;font-weight:500;">pinescriptwizard</span></td><td>🇮🇳 India</td><td style="color:#9B8FEA;">44.58%</td><td>🇺🇸 US</td><td>18.14%</td><td>🇸🇦 SA</td><td>4.73%</td></tr>
+          <tr><td><span style="color:#E8A838;font-weight:500;">pynesys.io</span></td><td>🇺🇸 US</td><td style="color:#E8A838;">46.49%</td><td>🇮🇳 India</td><td>45.46%</td><td>🇵🇱 PL</td><td>8.05%</td></tr>
+          <tr><td><span style="color:#6DBD6D;font-weight:500;">pynecore.org</span></td><td>🇺🇸 US</td><td style="color:#6DBD6D;">71.04%</td><td>🇮🇳 India</td><td>27.84%</td><td>🇬🇧 UK</td><td>1.12%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sec">India vs US dominance — all sites</div>
+    <div class="cw" style="height:210px;"><canvas id="gchart" role="img" aria-label="Bar chart showing India vs US traffic share per site."></canvas></div>
+  </div>
+
+  <div id="p-ch" class="panel">
+    <div style="background:#252525;border:0.5px solid rgba(255,255,255,.07);border-radius:6px;overflow:hidden;margin-bottom:1rem;">
+      <table class="rtable">
+        <thead><tr><th>Site</th><th>Direct</th><th>Org. Search</th><th>Referrals</th><th>Social/GenAI</th><th>Branded %</th></tr></thead>
+        <tbody>
+          <tr><td><span style="color:#E06C4B;font-weight:500;">getpinescript</span></td><td>40.21%</td><td style="color:#E06C4B;">59.79%</td><td style="color:rgba(255,255,255,.25);">—</td><td style="color:rgba(255,255,255,.25);">—</td><td>10%</td></tr>
+          <tr><td><span style="color:#4DB896;font-weight:500;">pineify.app</span></td><td>23.98%</td><td style="color:#4DB896;">62.11%</td><td>4.87%</td><td>8.93%</td><td>23%</td></tr>
+          <tr><td><span style="color:#5B9CF6;font-weight:500;">tradesage</span></td><td style="color:#5B9CF6;">79.71%</td><td>17.80%</td><td style="color:rgba(255,255,255,.25);">—</td><td>2.48%</td><td>1%</td></tr>
+          <tr><td><span style="color:#9B8FEA;font-weight:500;">pinescriptwizard</span></td><td>18.19%</td><td style="color:#9B8FEA;">77.70%</td><td>4.11%</td><td style="color:rgba(255,255,255,.25);">—</td><td>7%</td></tr>
+          <tr><td><span style="color:#E8A838;font-weight:500;">pynesys.io</span></td><td colspan="3" style="color:rgba(255,255,255,.3);font-style:italic;">Insufficient data (small site)</td><td style="color:rgba(255,255,255,.25);">—</td><td>3%</td></tr>
+          <tr><td><span style="color:#6DBD6D;font-weight:500;">pynecore.org</span></td><td colspan="3" style="color:rgba(255,255,255,.3);font-style:italic;">Insufficient data (small site)</td><td style="color:rgba(255,255,255,.25);">—</td><td style="color:#6DBD6D;font-weight:600;">66%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sec">Organic search dependency</div>
+    <div class="cw" style="height:180px;"><canvas id="cchart" role="img" aria-label="Bar chart showing organic search share per site."></canvas></div>
+  </div>
+
+  <div id="p-en" class="panel">
+    <div style="background:#252525;border:0.5px solid rgba(255,255,255,.07);border-radius:6px;overflow:hidden;margin-bottom:1rem;">
+      <table class="rtable">
+        <thead><tr><th>Site</th><th>Bounce rate</th><th>Pages/visit</th><th>Visit duration</th><th>Quality score</th></tr></thead>
+        <tbody>
+          <tr><td><span style="color:#6DBD6D;font-weight:500;">pynecore.org</span></td><td>40.05%</td><td>2.81</td><td style="color:#6DBD6D;font-weight:600;">3:12 ★</td><td><span class="badge" style="background:rgba(109,189,109,.15);color:#6DBD6D;">highest</span></td></tr>
+          <tr><td><span style="color:#E8A838;font-weight:500;">pynesys.io</span></td><td style="color:#E8A838;font-weight:600;">36.05% ★</td><td>1.95</td><td>1:14</td><td><span class="badge" style="background:rgba(232,168,56,.15);color:#E8A838;">low bounce</span></td></tr>
+          <tr><td><span style="color:#4DB896;font-weight:500;">pineify.app</span></td><td>41.78%</td><td style="color:#4DB896;font-weight:600;">3.50 ★</td><td>0:45</td><td><span class="badge" style="background:rgba(77,184,150,.15);color:#4DB896;">deep usage</span></td></tr>
+          <tr><td><span style="color:#5B9CF6;font-weight:500;">tradesage</span></td><td>44.20%</td><td>2.23</td><td>0:31</td><td>—</td></tr>
+          <tr><td><span style="color:#E06C4B;font-weight:500;">getpinescript</span></td><td>42.42%</td><td>1.72</td><td>0:17</td><td>—</td></tr>
+          <tr><td><span style="color:#9B8FEA;font-weight:500;">pinescriptwizard</span></td><td>45.33%</td><td>1.76</td><td>0:17</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="legend">
+      <span><span class="dot" style="background:#E06C4B;"></span>getpinescript</span>
+      <span><span class="dot" style="background:#4DB896;"></span>pineify</span>
+      <span><span class="dot" style="background:#5B9CF6;"></span>tradesage</span>
+      <span><span class="dot" style="background:#9B8FEA;"></span>pinescriptwizard</span>
+      <span><span class="dot" style="background:#E8A838;"></span>pynesys</span>
+      <span><span class="dot" style="background:#6DBD6D;"></span>pynecore</span>
+    </div>
+    <div class="cw" style="height:200px;"><canvas id="echart" role="img" aria-label="Bar chart comparing visit duration in seconds across all 6 sites."></canvas></div>
+  </div>
+
+  <div id="p-in" class="panel">
+    <div class="ins"><strong>Ranked by scale:</strong> pineify.app (394k) leads by a large margin, followed by a mid-tier cluster — pinescriptwizard (52k), getpinescript (37k), tradesage (24k) — and two small emerging tools: pynecore (14k) and pynesys (11k).</div>
+    <div class="ins"><strong>Growth leaders:</strong> tradesage.co (+60%) and getpinescript.com (+43%) are the fastest growing. In the small-cap tier, pynecore.org (+8%) grows steadily every month. pineify, pinescriptwizard, and pynesys are all declining.</div>
+    <div class="ins"><strong>pynecore.org has the best engagement quality</strong> by far: 3:12 visit duration (vs 0:17 for the weakest competitors) and 66% branded search — the highest in the cohort. Despite small traffic it has a loyal, returning developer audience that clearly values the product.</div>
+    <div class="ins"><strong>pynesys.io has the lowest bounce rate</strong> (36.05%) — visitors who land actually stay and explore. This engagement quality, combined with the outgoing traffic to GitHub and Discord, signals an active developer community around the tool.</div>
+    <div class="ins"><strong>Geographic split:</strong> pynecore.org is the most US-concentrated (71%) — likely reflecting its Python/developer niche. getpinescript and pinescriptwizard are India-first (41–45%). pynesys.io is the only site with near-equal US/India split (46% / 45%), making it uniquely bi-cultural.</div>
+    <div class="ins"><strong>Channel risk comparison:</strong> pinescriptwizard is most exposed to SEO risk (78% organic, 7% branded). tradesage relies almost entirely on direct traffic (80%) with minimal search coverage — opposite problem. pineify.app has the most diversified mix including Gen AI (5%), referrals (5%), and social (4%).</div>
+    <div class="btn-row">
+      <button class="btn-q" onclick="sendPrompt('Which of these 6 Pine Script tools has the best product-market fit based on the SimilarWeb data, and why?')">Best product-market fit? ↗</button>
+      <button class="btn-q" onclick="sendPrompt('pynecore.org has 3:12 visit duration and 66% branded search but only 14k total visits. What does this tell us about its growth strategy?')">Analyze pynecore.org ↗</button>
+      <button class="btn-q" onclick="sendPrompt('Create a competitive positioning matrix for these 6 Pine Script tools based on traffic volume vs engagement quality.')">Positioning matrix ↗</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+var C=['#E06C4B','#4DB896','#5B9CF6','#9B8FEA','#E8A838','#6DBD6D'];
+var names=['getpinescript','pineify (÷10)','tradesage','pinescriptwizard','pynesys.io','pynecore.org'];
+var charts={};
+var gOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+  scales:{
+    y:{ticks:{color:'rgba(255,255,255,.35)',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'},border:{color:'rgba(255,255,255,.08)'}},
+    x:{ticks:{color:'rgba(255,255,255,.35)',font:{size:10}},grid:{display:false},border:{color:'rgba(255,255,255,.08)'}}
+  }};
+
+function sw(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('p-'+id).classList.add('active');
+  if(id==='tr'&&!charts.tr)initTr();
+  if(id==='ge'&&!charts.ge)initGe();
+  if(id==='ch'&&!charts.ch)initCh();
+  if(id==='en'&&!charts.en)initEn();
+}
+
+function initTr(){
+  var data=[
+    {label:'getpinescript',data:[13000,9994,13700],borderColor:C[0],backgroundColor:'rgba(224,108,75,.07)',tension:.3,fill:true,pointRadius:4,pointBackgroundColor:C[0]},
+    {label:'pineify (÷10)',data:[13000,15500,10900],borderColor:C[1],backgroundColor:'rgba(77,184,150,.07)',tension:.3,fill:true,pointRadius:4,pointBackgroundColor:C[1],borderDash:[5,3]},
+    {label:'tradesage',data:[6500,7000,11000],borderColor:C[2],backgroundColor:'rgba(91,156,246,.07)',tension:.3,fill:true,pointRadius:4,pointBackgroundColor:C[2]},
+    {label:'pinescriptwizard',data:[14000,21000,17500],borderColor:C[3],backgroundColor:'rgba(155,143,234,.07)',tension:.3,fill:true,pointRadius:4,pointBackgroundColor:C[3],borderDash:[4,3]},
+    {label:'pynesys.io',data:[4500,3600,3000],borderColor:C[4],backgroundColor:'rgba(232,168,56,.07)',tension:.3,fill:true,pointRadius:4,pointBackgroundColor:C[4]},
+    {label:'pynecore.org',data:[4000,4750,5200],borderColor:C[5],backgroundColor:'rgba(109,189,109,.07)',tension:.3,fill:true,pointRadius:4,pointBackgroundColor:C[5]}
+  ];
+  charts.tr=new Chart(document.getElementById('tchart'),{
+    type:'line',data:{labels:['Feb 2026','Mar 2026','Apr 2026'],datasets:data},
+    options:Object.assign({},gOpts,{plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{if(ctx.datasetIndex===1)return ' pineify: '+(ctx.raw*10).toLocaleString();return ' '+names[ctx.datasetIndex]+': '+ctx.raw.toLocaleString();}}}}})
+  });
+}
+
+function initGe(){
+  charts.ge=new Chart(document.getElementById('gchart'),{
+    type:'bar',
+    data:{
+      labels:['getpinescript','pineify','tradesage','pinescriptwizard','pynesys','pynecore'],
+      datasets:[
+        {label:'India %',data:[41.44,8.82,22.78,44.58,45.46,27.84],backgroundColor:['rgba(224,108,75,.8)','rgba(77,184,150,.8)','rgba(91,156,246,.8)','rgba(155,143,234,.8)','rgba(232,168,56,.8)','rgba(109,189,109,.8)']},
+        {label:'US %',data:[27.84,16.77,50.73,18.14,46.49,71.04],backgroundColor:['rgba(224,108,75,.35)','rgba(77,184,150,.35)','rgba(91,156,246,.35)','rgba(155,143,234,.35)','rgba(232,168,56,.35)','rgba(109,189,109,.35)']}
+      ]
+    },
+    options:Object.assign({},gOpts,{scales:{
+      y:{ticks:{callback:v=>v+'%',color:'rgba(255,255,255,.35)',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'},border:{color:'rgba(255,255,255,.08)'},max:80},
+      x:{ticks:{color:'rgba(255,255,255,.35)',font:{size:9}},grid:{display:false},border:{color:'rgba(255,255,255,.08)'}}
+    }})
+  });
+}
+
+function initCh(){
+  charts.ch=new Chart(document.getElementById('cchart'),{
+    type:'bar',
+    data:{
+      labels:['getpinescript','pineify','tradesage','pinescriptwizard','pynesys*','pynecore*'],
+      datasets:[{label:'Org. Search %',data:[59.79,62.11,17.80,77.70,null,null],backgroundColor:C.map(c=>c+'CC')}]
+    },
+    options:Object.assign({},gOpts,{scales:{
+      y:{ticks:{callback:v=>v!=null?v+'%':'n/a',color:'rgba(255,255,255,.35)',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'},border:{color:'rgba(255,255,255,.08)'},max:100},
+      x:{ticks:{color:'rgba(255,255,255,.35)',font:{size:9}},grid:{display:false},border:{color:'rgba(255,255,255,.08)'}}
+    }})
+  });
+}
+
+function initEn(){
+  charts.en=new Chart(document.getElementById('echart'),{
+    type:'bar',
+    data:{
+      labels:['getpinescript','pineify','tradesage','pinescriptwizard','pynesys','pynecore'],
+      datasets:[{label:'Visit duration (seconds)',data:[17,45,31,17,74,192],backgroundColor:C.map(c=>c+'CC')}]
+    },
+    options:Object.assign({},gOpts,{scales:{
+      y:{ticks:{callback:v=>{if(v>=60)return Math.floor(v/60)+'m '+('0'+(v%60)).slice(-2)+'s';return v+'s';},color:'rgba(255,255,255,.35)',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'},border:{color:'rgba(255,255,255,.08)'}},
+      x:{ticks:{color:'rgba(255,255,255,.35)',font:{size:9}},grid:{display:false},border:{color:'rgba(255,255,255,.08)'}}
+    }})
+  });
+}
+</script>
