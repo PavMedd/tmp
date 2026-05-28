@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Competitive Intelligence — Financial Media Ecosystem | TakeProfit Analytics</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+/* ── Hard-locked dark theme ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: #080F1C !important;
+  color: #E2EBF8 !important;
+  color-scheme: dark;
+}
+:root {
+  --bg:     #080F1C;
+  --surf:   #0E1A2E;
+  --hi:     #152035;
+  --card:   #111D30;
+  --border: #1C2E48;
+  --brt:    #284060;
+  --text:   #E2EBF8;
+  --sub:    #7A9AC0;
+  --dim:    #4A6480;
+  --d1:#6366F1; --d2:#F59E0B; --d3:#10B981; --d4:#EF4444;
+  --d5:#F97316; --d6:#22D3EE; --d7:#8B5CF6; --d8:#06B6D4;
+  --emerald:#10B981; --rose:#F43F5E; --amber:#F59E0B;
+  --cyan:#22D3EE; --violet:#8B5CF6; --indigo:#6366F1;
+}
+
+/* ── Typography ── */
+body { font-family: 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-size: 13px; line-height: 1.6; }
+
+/* ── Layout ── */
+.wrap { max-width: 1340px; margin: 0 auto; padding: 0 20px; }
+.section { padding: 28px 0; border-bottom: 0.5px solid var(--border); }
+.section:last-child { border-bottom: none; }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+.ga { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 10px; }
+
+/* ── Header ── */
+.hdr { background: linear-gradient(135deg,#050b16 0%,#0e1a2e 55%,#0c1626 100%);
+  border-bottom: 1px solid var(--brt); padding: 36px 0 28px; }
+.brand-line { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+.brand-logo { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600;
+  color: #E2EBF8; }
+.brand-logo svg { width: 24px; height: 24px; }
+.brand-sep { width: 1px; height: 20px; background: var(--brt); }
+.data-badge { font-size: 10px; color: var(--sub); display: flex; align-items: center; gap: 5px; }
+.report-title { font-size: 26px; font-weight: 700; letter-spacing: -.02em;
+  background: linear-gradient(135deg, #e2ebf8 20%, #7a9ac0 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+.report-sub { font-size: 13px; color: var(--sub); margin-bottom: 18px; }
+.hdr-meta { display: flex; gap: 22px; flex-wrap: wrap; }
+.hdr-meta span { font-size: 11px; color: var(--dim); }
+.hdr-meta strong { color: var(--sub); }
+
+/* ── Tab nav ── */
+.tab-nav { background: var(--surf); border-bottom: 0.5px solid var(--border);
+  position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px); }
+.tab-nav-inner { display: flex; gap: 0; overflow-x: auto; padding: 0 20px; scrollbar-width: none; }
+.tab-nav-inner::-webkit-scrollbar { display: none; }
+.tab-btn { padding: 13px 15px; font-size: 12px; font-weight: 500; cursor: pointer;
+  border: none; background: transparent; color: var(--dim); white-space: nowrap;
+  border-bottom: 2px solid transparent; transition: all .15s; letter-spacing: .01em; }
+.tab-btn.active { color: var(--d1); border-bottom-color: var(--d1); background: transparent; }
+.tab-btn:hover:not(.active) { color: var(--sub); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── Section headings ── */
+.sh { font-size: 17px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 3px; color: var(--text); }
+.ss { font-size: 12px; color: var(--sub); margin-bottom: 18px; }
+
+/* ── Cards ── */
+.card { background: var(--card); border: 0.5px solid var(--border); border-radius: 10px; }
+.ci { padding: 16px 18px; }
+.ct { font-size: 13px; font-weight: 500; margin-bottom: 3px; color: var(--text); }
+.cs { font-size: 11px; color: var(--sub); margin-bottom: 12px; }
+
+/* ── KPI ── */
+.kpi { background: var(--card); border: 0.5px solid var(--border); border-radius: 10px; padding: 13px 15px; }
+.kpi-l { font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; }
+.kpi-v { font-size: 21px; font-weight: 700; letter-spacing: -.02em; }
+.kpi-s { font-size: 11px; color: var(--sub); margin-top: 2px; }
+.badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px;
+  border-radius: 4px; margin-top: 4px; }
+.badge-up   { background: rgba(16,185,129,.15); color: var(--emerald); }
+.badge-down { background: rgba(244,63,94,.15); color: var(--rose); }
+.badge-neu  { background: rgba(34,211,238,.12); color: var(--cyan); }
+
+/* ── Domain dot ── */
+.dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; display: inline-block; }
+.dbadge { display: inline-flex; align-items: center; gap: 6px; }
+
+/* ── Table ── */
+.dt { width: 100%; border-collapse: collapse; font-size: 12px; }
+.dt th { padding: 8px 11px; text-align: left; font-weight: 500; font-size: 11px;
+  color: var(--sub); border-bottom: 0.5px solid var(--border);
+  background: var(--hi); white-space: nowrap; }
+.dt td { padding: 8px 11px; border-bottom: 0.5px solid var(--border); color: var(--text); }
+.dt tr:last-child td { border-bottom: none; }
+.dt tr:hover td { background: rgba(255,255,255,.015); }
+.nr { text-align: right !important; }
+.good { color: var(--emerald) !important; }
+.warn { color: var(--rose) !important; }
+.acc  { color: var(--cyan) !important; }
+.hl   { color: var(--amber) !important; }
+.viol { color: var(--violet) !important; }
+
+/* ── Bar rows (CSS-only) ── */
+.br { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.bl { font-size: 11px; color: var(--sub); width: 115px; text-align: right; flex-shrink: 0; }
+.bt { flex: 1; height: 7px; background: var(--hi); border-radius: 4px; overflow: hidden; min-width: 0; }
+.bf { height: 100%; border-radius: 4px; }
+.bv { font-size: 11px; font-weight: 600; width: 44px; flex-shrink: 0; }
+
+/* ── Chart containers — FIXED HEIGHT ── */
+.chart-wrap { position: relative; width: 100%; }
+.chart-wrap canvas { display: block; }
+
+/* ── Country rows ── */
+.cr { display: flex; justify-content: space-between; align-items: center;
+  padding: 5px 0; border-bottom: 0.5px solid var(--border); font-size: 12px; }
+.cr:last-child { border-bottom: none; }
+
+/* ── Brand bar (branded vs non-branded) ── */
+.brand-bar { height: 9px; border-radius: 5px; background: var(--hi); overflow: hidden;
+  display: flex; margin-top: 5px; }
+
+/* ── Keyword tags ── */
+.kw { display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 4px;
+  margin: 2px 2px 2px 0; background: rgba(99,102,241,.1);
+  border: 0.5px solid rgba(99,102,241,.22); color: #8b9cf8; }
+
+/* ── Insight box ── */
+.insight-box { background: #060d19; border: 0.5px solid var(--border);
+  border-radius: 10px; overflow: hidden; margin-top: 18px; }
+.insight-hdr { padding: 9px 15px; background: #040a13;
+  border-bottom: 0.5px solid var(--border); font-size: 11px; font-weight: 600;
+  color: var(--sub); text-transform: uppercase; letter-spacing: .08em;
+  display: flex; align-items: center; gap: 7px; }
+.insight-item { padding: 12px 15px; border-bottom: 0.5px solid var(--border);
+  display: flex; gap: 10px; }
+.insight-item:last-child { border-bottom: none; }
+.ii-icon { width: 20px; height: 20px; border-radius: 5px; display: flex; align-items: center;
+  justify-content: center; font-size: 11px; flex-shrink: 0; margin-top: 2px; }
+.ii-body { font-size: 12px; color: var(--sub); line-height: 1.65; }
+.ii-title { font-weight: 600; margin-right: 4px; }
+
+/* ── Alert strip ── */
+.alert { padding: 9px 12px; border-radius: 6px; font-size: 11px; color: var(--sub);
+  display: flex; gap: 8px; align-items: flex-start; margin-top: 10px; }
+.alert-rose { background: rgba(244,63,94,.06); border-left: 3px solid var(--rose); }
+.alert-cyan { background: rgba(34,211,238,.06); border-left: 3px solid var(--cyan); }
+
+/* ── Metric box ── */
+.mb { background: var(--hi); border-radius: 8px; padding: 11px 13px; }
+.mb .l { font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 3px; }
+.mb .v { font-size: 15px; font-weight: 700; color: var(--text); }
+.mb .s { font-size: 10px; color: var(--sub); margin-top: 2px; }
+
+/* ── Footer ── */
+.footer { background: var(--surf); border-top: 0.5px solid var(--border);
+  padding: 18px 20px; text-align: center; }
+.footer-brand { display: flex; align-items: center; justify-content: center;
+  gap: 8px; margin-bottom: 6px; }
+.footer p { font-size: 11px; color: var(--dim); }
+
+/* ── Responsive ── */
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.g4{grid-template-columns:1fr}.report-title{font-size:19px}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="wrap">
+    <div class="brand-line">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="24" height="24" rx="6" fill="#6366F1" fill-opacity="0.15"/>
+          <path d="M5 17L9 12L12 15L16 9L19 12" stroke="#6366F1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="19" cy="12" r="1.5" fill="#10B981"/>
+        </svg>
+        <span>TakeProfit Analytics</span>
+      </div>
+      <div class="brand-sep"></div>
+      <div class="data-badge">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <circle cx="6" cy="6" r="5.5" stroke="#4A6480" stroke-width="1"/>
+          <path d="M6 3v3l2 1.5" stroke="#4A6480" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+        Data: SimilarWeb Pro
+      </div>
+    </div>
+    <h1 class="report-title">Financial Media Competitive Intelligence</h1>
+    <p class="report-sub">Full competitive analysis of 8 domains — traffic, acquisition channels, SEO, referral ecosystem</p>
+    <div class="hdr-meta">
+      <span><strong>Period:</strong> Feb – Apr 2026</span>
+      <span><strong>Source:</strong> SimilarWeb Pro</span>
+      <span><strong>Domains analyzed:</strong> 8</span>
+      <span><strong>Report date:</strong> May 26, 2026</span>
+    </div>
+  </div>
+</header>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <div class="tab-nav-inner">
+    <button class="tab-btn active" onclick="showTab('overview',this)">📋 Overview</button>
+    <button class="tab-btn" onclick="showTab('traffic',this)">📈 Traffic</button>
+    <button class="tab-btn" onclick="showTab('channels',this)">🎯 Channels</button>
+    <button class="tab-btn" onclick="showTab('seo',this)">🔍 SEO</button>
+    <button class="tab-btn" onclick="showTab('referrals',this)">🔗 Referrals</button>
+    <button class="tab-btn" onclick="showTab('geo',this)">🌍 Geography</button>
+    <button class="tab-btn" onclick="showTab('domains',this)">🏠 Profiles</button>
+    <button class="tab-btn" onclick="showTab('insights',this)">💡 Insights</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ═══════════ OVERVIEW ═══════════ -->
+<div id="tab-overview" class="tab-panel active section">
+  <h2 class="sh">Executive Overview</h2>
+  <p class="ss">Core metrics across all 8 competitors · Feb–Apr 2026 · SimilarWeb Worldwide</p>
+
+  <div class="ga" style="margin-bottom:18px">
+    <div class="kpi"><div class="kpi-l">🏆 Traffic leader</div><div class="kpi-v" style="color:var(--d4)">TradingView</div><div class="kpi-s">730.9M visits</div><span class="badge badge-down">↓ 11.82%</span></div>
+    <div class="kpi"><div class="kpi-l">📈 Only growing</div><div class="kpi-v" style="color:var(--emerald)">StockAnalysis</div><div class="kpi-s">23.72M visits</div><span class="badge badge-up">↑ 5.73%</span></div>
+    <div class="kpi"><div class="kpi-l">⏱ Deepest sessions</div><div class="kpi-v" style="color:var(--cyan)">Barchart</div><div class="kpi-s">21:07 avg duration</div><span class="badge badge-neu">6× above avg</span></div>
+    <div class="kpi"><div class="kpi-l">📧 Email retention</div><div class="kpi-v" style="color:var(--violet)">SeekingAlpha</div><div class="kpi-s">12.44% email traffic</div><span class="badge badge-up">10× peers</span></div>
+  </div>
+
+  <div class="card">
+    <div class="ci"><div class="ct">Core Metrics Comparison Table</div><div class="cs">All values Feb–Apr 2026 · Worldwide · All Traffic</div></div>
+    <div style="overflow-x:auto">
+    <table class="dt">
+      <thead><tr>
+        <th>Domain</th><th class="nr">Visits</th><th class="nr">Change</th>
+        <th class="nr">Bounce</th><th class="nr">Duration</th><th class="nr">Pages/Visit</th>
+        <th class="nr">Desktop</th><th class="nr">Mobile</th>
+        <th class="nr">Global rank</th><th class="nr">Industry</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d4)"></span>tradingview.com</span></td>
+          <td class="nr" style="font-weight:700">730.9M</td><td class="nr warn">↓ 11.82%</td>
+          <td class="nr good">47.63%</td><td class="nr">4:27</td>
+          <td class="nr good" style="font-weight:700">8.65</td>
+          <td class="nr good">73.53%</td><td class="nr">26.47%</td>
+          <td class="nr">#111</td><td class="nr">#1 Inv.</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d2)"></span>finance.yahoo.com</span></td>
+          <td class="nr" style="font-weight:700">642.2M</td><td class="nr warn">↓ 1.49%</td>
+          <td class="nr warn">56.25%</td><td class="nr">4:24</td><td class="nr">3.25</td>
+          <td class="nr">60.09%</td><td class="nr">39.91%</td>
+          <td class="nr">#199</td><td class="nr">#20 Media</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d1)"></span>investing.com</span></td>
+          <td class="nr" style="font-weight:700">539.6M</td><td class="nr warn" style="font-weight:700">↓ 20.54%</td>
+          <td class="nr warn">54.93%</td><td class="nr">4:33</td><td class="nr warn">2.80</td>
+          <td class="nr warn">38.14%</td><td class="nr hl">61.86%</td>
+          <td class="nr">#324</td><td class="nr">Inv.</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d8)"></span>coinmarketcap.com</span></td>
+          <td class="nr" style="font-weight:700">156.1M</td><td class="nr warn">↓ 12.27%</td>
+          <td class="nr warn">57.34%</td><td class="nr warn">3:17</td><td class="nr warn">2.34</td>
+          <td class="nr">58.58%</td><td class="nr">41.42%</td>
+          <td class="nr">#1,508</td><td class="nr">#1 Crypto</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d3)"></span>marketwatch.com</span></td>
+          <td class="nr" style="font-weight:700">100.7M</td><td class="nr warn">↓ 11.61%</td>
+          <td class="nr warn">58.38%</td><td class="nr warn">4:03</td><td class="nr warn">2.60</td>
+          <td class="nr">53.44%</td><td class="nr">46.56%</td>
+          <td class="nr">#2,072</td><td class="nr">Fin.</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d5)"></span>seekingalpha.com</span></td>
+          <td class="nr" style="font-weight:700">55.54M</td><td class="nr warn">↓ 9.61%</td>
+          <td class="nr good">41.42%</td><td class="nr">5:11</td><td class="nr">5.34</td>
+          <td class="nr">65.05%</td><td class="nr">34.95%</td>
+          <td class="nr">#2,667</td><td class="nr">Fin.</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d6)"></span>barchart.com</span></td>
+          <td class="nr" style="font-weight:700">25.29M</td><td class="nr warn">↓ 10.10%</td>
+          <td class="nr good">43.97%</td><td class="nr acc" style="font-weight:700">21:07</td><td class="nr">5.57</td>
+          <td class="nr">67.04%</td><td class="nr">32.96%</td>
+          <td class="nr">#6,197</td><td class="nr">#81 Inv.</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d7)"></span>stockanalysis.com</span></td>
+          <td class="nr" style="font-weight:700">23.72M</td><td class="nr good" style="font-weight:700">↑ 5.73%</td>
+          <td class="nr good" style="font-weight:700">38.97%</td><td class="nr good">6:55</td><td class="nr good">6.05</td>
+          <td class="nr">60.47%</td><td class="nr">39.53%</td>
+          <td class="nr">#6,148</td><td class="nr">#79 Inv.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div style="padding:9px 14px;border-top:0.5px solid var(--border);display:flex;gap:16px;flex-wrap:wrap">
+      <span style="font-size:11px;color:var(--dim)"><span style="display:inline-block;width:8px;height:8px;background:var(--emerald);border-radius:2px;margin-right:4px"></span>Favourable</span>
+      <span style="font-size:11px;color:var(--dim)"><span style="display:inline-block;width:8px;height:8px;background:var(--rose);border-radius:2px;margin-right:4px"></span>Needs attention</span>
+      <span style="font-size:11px;color:var(--dim)"><span style="display:inline-block;width:8px;height:8px;background:var(--cyan);border-radius:2px;margin-right:4px"></span>Outlier</span>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-top:12px">
+    <div class="card ci">
+      <div class="ct">Pages per Visit</div><div class="cs">Depth of audience engagement — higher is better</div>
+      <div class="br"><span class="bl">TradingView</span><div class="bt"><div class="bf" style="width:100%;background:var(--d4)"></div></div><span class="bv" style="color:var(--d4)">8.65</span></div>
+      <div class="br"><span class="bl">StockAnalysis</span><div class="bt"><div class="bf" style="width:70%;background:var(--d7)"></div></div><span class="bv" style="color:var(--d7)">6.05</span></div>
+      <div class="br"><span class="bl">Barchart</span><div class="bt"><div class="bf" style="width:64%;background:var(--d6)"></div></div><span class="bv" style="color:var(--d6)">5.57</span></div>
+      <div class="br"><span class="bl">SeekingAlpha</span><div class="bt"><div class="bf" style="width:62%;background:var(--d5)"></div></div><span class="bv" style="color:var(--d5)">5.34</span></div>
+      <div class="br"><span class="bl">Yahoo Finance</span><div class="bt"><div class="bf" style="width:37.6%;background:var(--d2)"></div></div><span class="bv" style="color:var(--d2)">3.25</span></div>
+      <div class="br"><span class="bl">Investing</span><div class="bt"><div class="bf" style="width:32.4%;background:var(--d1)"></div></div><span class="bv" style="color:var(--d1)">2.80</span></div>
+      <div class="br"><span class="bl">MarketWatch</span><div class="bt"><div class="bf" style="width:30.1%;background:var(--d3)"></div></div><span class="bv" style="color:var(--d3)">2.60</span></div>
+      <div class="br"><span class="bl">CoinMktCap</span><div class="bt"><div class="bf" style="width:27.1%;background:var(--d8)"></div></div><span class="bv" style="color:var(--d8)">2.34</span></div>
+    </div>
+    <div class="card ci">
+      <div class="ct">Bounce Rate — Lower is Better</div><div class="cs">Reflects content-audience alignment</div>
+      <div class="br"><span class="bl" style="color:var(--emerald)">StockAnalysis</span><div class="bt"><div class="bf" style="width:66.8%;background:var(--d7)"></div></div><span class="bv good">38.97%</span></div>
+      <div class="br"><span class="bl" style="color:var(--emerald)">SeekingAlpha</span><div class="bt"><div class="bf" style="width:71.1%;background:var(--d5)"></div></div><span class="bv good">41.42%</span></div>
+      <div class="br"><span class="bl">Barchart</span><div class="bt"><div class="bf" style="width:75.4%;background:var(--d6)"></div></div><span class="bv">43.97%</span></div>
+      <div class="br"><span class="bl">TradingView</span><div class="bt"><div class="bf" style="width:81.7%;background:var(--d4)"></div></div><span class="bv">47.63%</span></div>
+      <div class="br"><span class="bl">Investing</span><div class="bt"><div class="bf" style="width:94.3%;background:var(--d1)"></div></div><span class="bv warn">54.93%</span></div>
+      <div class="br"><span class="bl">Yahoo Finance</span><div class="bt"><div class="bf" style="width:96.5%;background:var(--d2)"></div></div><span class="bv warn">56.25%</span></div>
+      <div class="br"><span class="bl">CoinMktCap</span><div class="bt"><div class="bf" style="width:98.4%;background:var(--d8)"></div></div><span class="bv warn">57.34%</span></div>
+      <div class="br"><span class="bl" style="color:var(--rose)">MarketWatch</span><div class="bt"><div class="bf" style="width:100%;background:var(--d3)"></div></div><span class="bv warn" style="font-weight:700">58.38%</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TRAFFIC ═══════════ -->
+<div id="tab-traffic" class="tab-panel section">
+  <h2 class="sh">Traffic Volume & Dynamics</h2>
+  <p class="ss">Total visits, growth trends and device breakdown · Feb–Apr 2026</p>
+
+  <div class="card ci" style="margin-bottom:12px">
+    <div class="ct">Total Traffic Volume — All Domains</div>
+    <div class="cs">Feb–Apr 2026 · millions of visits</div>
+    <div class="chart-wrap" style="height:200px"><canvas id="trafficChart"></canvas></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px">
+    <div class="card ci">
+      <div class="ct">Period-over-Period Traffic Change</div>
+      <div class="cs">StockAnalysis is the only domain growing while the category contracts</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="changeChart"></canvas></div>
+    </div>
+    <div class="card ci">
+      <div class="ct">StockAnalysis Monthly Breakdown</div>
+      <div class="cs">Feb / Mar / Apr 2026 — unique actual data available</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="monthlyChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card ci">
+    <div class="ct">Desktop vs Mobile Split</div>
+    <div class="cs">Blue = desktop · Purple = mobile. Investing.com's mobile-dominant profile is the critical anomaly</div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-top:8px">
+      <div class="br"><span class="bl" style="width:130px">TradingView</span><div class="bt" style="height:12px;display:flex"><div style="height:100%;background:var(--d4);width:73.53%"></div><div style="height:100%;background:var(--violet);opacity:.7;width:26.47%"></div></div><span style="font-size:10px;width:100px;flex-shrink:0">D:73.5% M:26.5%</span></div>
+      <div class="br"><span class="bl" style="width:130px">SeekingAlpha</span><div class="bt" style="height:12px;display:flex"><div style="height:100%;background:var(--d5);width:65.05%"></div><div style="height:100%;background:var(--violet);opacity:.7;width:34.95%"></div></div><span style="font-size:10px;width:100px;flex-shrink:0">D:65.1% M:34.9%</span></div>
+      <div class="br"><span class="bl" style="width:130px">Barchart</span><div class="bt" style="height:12px;display:flex"><div style="height:100%;background:var(--d6);width:67.04%"></div><div style="height:100%;background:var(--violet);opacity:.7;width:32.96%"></div></div><span style="font-size:10px;width:100px;flex-shrink:0">D:67.0% M:33.0%</span></div>
+      <div class="br"><span class="bl" style="width:130px">StockAnalysis</span><div class="bt" style="height:12px;display:flex"><div style="height:100%;background:var(--d7);width:60.47%"></div><div style="height:100%;background:var(--violet);opacity:.7;width:39.53%"></div></div><span style="font-size:10px;width:100px;flex-shrink:0">D:60.5% M:39.5%</span></div>
+      <div class="br"><span class="bl" style="width:130px">Yahoo Finance</span><div class="bt" style="height:12px;display:flex"><div style="height:100%;background:var(--d2);width:60.09%"></div><div style="height:100%;background:var(--violet);opacity:.7;width:39.91%"></div></div><span style="font-size:10px;width:100px;flex-shrink:0">D:60.1% M:39.9%</span></div>
+      <div class="br"><span class="bl" style="width:130px">CoinMarketCap</span><div class="bt" style="height:12px;display:flex"><div style="height:100%;background:var(--d8);width:58.58%"></div><div style="height:100%;background:var(--violet);opacity:.7;width:41.42%"></div></div><span style="font-size:10px;width:100px;flex-shrink:0">D:58.6% M:41.4%</span></div>
+      <div class="br"><span class="bl" style="width:130px">MarketWatch</span><div class="bt" style="height:12px;display:flex"><div style="height:100%;background:var(--d3);width:53.44%"></div><div style="height:100%;background:var(--violet);opacity:.7;width:46.56%"></div></div><span style="font-size:10px;width:100px;flex-shrink:0">D:53.4% M:46.6%</span></div>
+      <div class="br"><span class="bl" style="width:130px;color:var(--rose)">Investing.com ⚠</span><div class="bt" style="height:12px;display:flex"><div style="height:100%;background:var(--d1);width:38.14%"></div><div style="height:100%;background:var(--rose);width:61.86%"></div></div><span style="font-size:10px;width:100px;flex-shrink:0;color:var(--rose)">D:38.1% M:61.9%</span></div>
+    </div>
+    <div class="alert alert-rose"><span>⚠</span><span><strong style="color:var(--rose)">Investing.com mobile-engagement gap:</strong> 61.86% mobile share (highest in set) yet only 2.80 pages/visit (lowest). Mobile Core Web Vitals and content depth on mobile are the immediate fix priority.</span></div>
+  </div>
+</div>
+
+<!-- ═══════════ CHANNELS ═══════════ -->
+<div id="tab-channels" class="tab-panel section">
+  <h2 class="sh">Traffic Acquisition Channels</h2>
+  <p class="ss">Full channel breakdown for all 8 domains · including Gen AI (emerging in 2026)</p>
+
+  <!-- FIXED: explicit pixel height on wrapper, maintainAspectRatio false on canvas only -->
+  <div class="card ci" style="margin-bottom:12px">
+    <div class="ct">100% Stacked Channel Distribution</div>
+    <div class="cs">Direct dominance of 50–69% across most domains — concentrated dependency on brand recall</div>
+    <div class="chart-wrap" style="height:320px">
+      <canvas id="channelChart"></canvas>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:12px">
+    <div class="ci"><div class="ct">Full Channel Breakdown (%)</div><div class="cs">All channels including Gen AI, Paid Social, Affiliates · Feb–Apr 2026</div></div>
+    <div style="overflow-x:auto">
+    <table class="dt">
+      <thead><tr>
+        <th>Domain</th><th class="nr">Direct</th><th class="nr">Org.Search</th>
+        <th class="nr">Referrals</th><th class="nr">Social</th><th class="nr">Email</th>
+        <th class="nr">Paid Srch</th><th class="nr">Gen AI</th><th class="nr">Display</th>
+        <th class="nr">Paid Soc</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d4)"></span>tradingview.com</span></td>
+          <td class="nr hl">69.14%</td><td class="nr">16.01%</td><td class="nr">3.16%</td>
+          <td class="nr viol">8.18%</td><td class="nr">1.41%</td>
+          <td class="nr">0.30%</td><td class="nr acc">0.59%</td><td class="nr">0.91%</td><td class="nr">0.07%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d3)"></span>marketwatch.com</span></td>
+          <td class="nr hl">68.15%</td><td class="nr">20.16%</td><td class="nr">3.30%</td>
+          <td class="nr">2.96%</td><td class="nr">2.25%</td>
+          <td class="nr">0.33%</td><td class="nr acc">0.39%</td><td class="nr">2.42%</td><td class="nr">0.03%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d8)"></span>coinmarketcap.com</span></td>
+          <td class="nr hl">66.60%</td><td class="nr">19.39%</td><td class="nr">3.70%</td>
+          <td class="nr viol">6.96%</td><td class="nr">1.81%</td>
+          <td class="nr">0.01%</td><td class="nr acc">0.52%</td><td class="nr">0.99%</td><td class="nr">0.01%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d6)"></span>barchart.com</span></td>
+          <td class="nr">61.28%</td><td class="nr">21.25%</td><td class="nr">3.47%</td>
+          <td class="nr viol">8.61%</td><td class="nr">3.41%</td>
+          <td class="nr">0.02%</td><td class="nr acc" style="font-weight:700">1.37%</td><td class="nr">0.55%</td><td class="nr">0.04%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d7)"></span>stockanalysis.com</span></td>
+          <td class="nr">60.51%</td><td class="nr good" style="font-weight:700">30.24%</td><td class="nr">4.00%</td>
+          <td class="nr">2.90%</td><td class="nr">1.12%</td>
+          <td class="nr">0.02%</td><td class="nr acc" style="font-weight:700">1.02%</td><td class="nr">0.17%</td><td class="nr">0.01%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d5)"></span>seekingalpha.com</span></td>
+          <td class="nr">54.21%</td><td class="nr">17.25%</td><td class="nr">5.80%</td>
+          <td class="nr">2.28%</td><td class="nr" style="color:var(--rose);font-weight:700">12.44%</td>
+          <td class="nr">4.09%</td><td class="nr acc">0.42%</td><td class="nr">2.60%</td><td class="nr">0.20%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d1)"></span>investing.com</span></td>
+          <td class="nr">52.22%</td><td class="nr good" style="font-weight:700">36.48%</td><td class="nr">3.84%</td>
+          <td class="nr">4.70%</td><td class="nr warn">0.97%</td>
+          <td class="nr">0.70%</td><td class="nr acc">0.44%</td><td class="nr">0.56%</td><td class="nr">0.06%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d2)"></span>finance.yahoo.com</span></td>
+          <td class="nr">50.40%</td><td class="nr">27.88%</td><td class="nr hl" style="font-weight:700">15.78%</td>
+          <td class="nr">2.85%</td><td class="nr">2.48%</td>
+          <td class="nr">0.02%</td><td class="nr acc">0.30%</td><td class="nr">0.27%</td><td class="nr">0.02%</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- Gen AI spotlight -->
+  <div class="card ci" style="border-left:3px solid var(--cyan)">
+    <div class="ct" style="color:var(--cyan)">🤖 Gen AI Traffic — Emerging Acquisition Channel (2026)</div>
+    <div class="cs">% of total visits from ChatGPT, Copilot, Perplexity and other LLM-powered sources</div>
+    <div style="display:flex;flex-direction:column;gap:5px;margin-top:8px">
+      <div class="br"><span class="bl">Barchart</span><div class="bt"><div class="bf" style="width:100%;background:var(--cyan)"></div></div><span class="bv acc">1.37%</span></div>
+      <div class="br"><span class="bl">StockAnalysis</span><div class="bt"><div class="bf" style="width:74.5%;background:var(--cyan)"></div></div><span class="bv acc">1.02%</span></div>
+      <div class="br"><span class="bl">TradingView</span><div class="bt"><div class="bf" style="width:43%;background:var(--cyan)"></div></div><span class="bv acc">0.59%</span></div>
+      <div class="br"><span class="bl">CoinMktCap</span><div class="bt"><div class="bf" style="width:38%;background:var(--cyan)"></div></div><span class="bv acc">0.52%</span></div>
+      <div class="br"><span class="bl">Investing</span><div class="bt"><div class="bf" style="width:32%;background:var(--cyan)"></div></div><span class="bv acc">0.44%</span></div>
+      <div class="br"><span class="bl">SeekingAlpha</span><div class="bt"><div class="bf" style="width:31%;background:var(--cyan)"></div></div><span class="bv acc">0.42%</span></div>
+      <div class="br"><span class="bl">MarketWatch</span><div class="bt"><div class="bf" style="width:28%;background:var(--cyan)"></div></div><span class="bv acc">0.39%</span></div>
+      <div class="br"><span class="bl">Yahoo Finance</span><div class="bt"><div class="bf" style="width:22%;background:var(--cyan)"></div></div><span class="bv acc">0.30%</span></div>
+    </div>
+    <div class="alert alert-cyan" style="margin-top:10px"><span>💡</span><span>Barchart and StockAnalysis lead Gen AI traffic — structured data pages (dividends, earnings, commodity prices) are more frequently cited by LLM responses. chatgpt.com has appeared as a named referrer in the dataset.</span></div>
+  </div>
+</div>
+
+<!-- ═══════════ SEO ═══════════ -->
+<div id="tab-seo" class="tab-panel section">
+  <h2 class="sh">SEO & Organic Search</h2>
+  <p class="ss">Branded vs non-branded split, top keywords, organic moat analysis</p>
+
+  <div class="card ci" style="margin-bottom:12px">
+    <div class="ct">Branded vs Non-Branded Organic Traffic Split</div>
+    <div class="cs">Green = non-branded (SEO opportunity). Purple = branded dependency. Higher non-branded = healthier SEO moat</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span class="dbadge"><span class="dot" style="background:var(--d5)"></span>seekingalpha.com — <strong style="color:var(--emerald)">88% non-branded</strong></span><span style="color:var(--sub);font-size:11px">17.25% organic share</span></div><div class="brand-bar"><div style="width:88%;background:var(--emerald)"></div><div style="width:12%;background:var(--violet)"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span class="dbadge"><span class="dot" style="background:var(--d3)"></span>marketwatch.com — <strong style="color:var(--emerald)">83% non-branded</strong></span><span style="color:var(--sub);font-size:11px">20.16% organic share</span></div><div class="brand-bar"><div style="width:83%;background:var(--emerald)"></div><div style="width:17%;background:var(--violet)"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span class="dbadge"><span class="dot" style="background:var(--d1)"></span>investing.com — <strong style="color:var(--emerald)">80% non-branded</strong></span><span style="color:var(--sub);font-size:11px">36.48% organic — highest</span></div><div class="brand-bar"><div style="width:80%;background:var(--emerald)"></div><div style="width:20%;background:var(--violet)"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span class="dbadge"><span class="dot" style="background:var(--d6)"></span>barchart.com — <strong style="color:var(--emerald)">79% non-branded</strong></span><span style="color:var(--sub);font-size:11px">21.25% organic share</span></div><div class="brand-bar"><div style="width:79%;background:var(--emerald)"></div><div style="width:21%;background:var(--violet)"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span class="dbadge"><span class="dot" style="background:var(--d7)"></span>stockanalysis.com — <strong style="color:var(--emerald)">75% non-branded</strong></span><span style="color:var(--sub);font-size:11px">30.24% organic share</span></div><div class="brand-bar"><div style="width:75%;background:var(--emerald)"></div><div style="width:25%;background:var(--violet)"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span class="dbadge"><span class="dot" style="background:var(--d4)"></span>tradingview.com — <strong style="color:var(--rose)">48% branded ⚠</strong></span><span style="color:var(--sub);font-size:11px">16.01% organic share</span></div><div class="brand-bar"><div style="width:52%;background:var(--emerald)"></div><div style="width:48%;background:var(--violet)"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span class="dbadge"><span class="dot" style="background:var(--d8)"></span>coinmarketcap.com — <strong style="color:var(--rose)">61% branded ⚠</strong></span><span style="color:var(--sub);font-size:11px">19.39% organic share</span></div><div class="brand-bar"><div style="width:39%;background:var(--emerald)"></div><div style="width:61%;background:var(--violet)"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span class="dbadge"><span class="dot" style="background:var(--d2)"></span>finance.yahoo.com — data unavailable</span><span style="color:var(--sub);font-size:11px">27.88% organic share</span></div><div class="brand-bar" style="background:rgba(255,255,255,.04)"><div style="width:100%;height:100%;background:repeating-linear-gradient(45deg,var(--border),var(--border) 5px,transparent 5px,transparent 10px)"></div></div></div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px">
+    <div class="card ci">
+      <div class="ct" style="color:var(--d7)">StockAnalysis — Top Non-Branded Keywords</div>
+      <div class="cs">Explosive growth in dividend-history cluster — the SEO template to replicate</div>
+      <div class="br"><span class="kw">qqqi dividend history</span><span style="color:var(--emerald);font-size:11px;margin-left:auto">1.24% · ↑215%</span></div>
+      <div class="br"><span class="kw">what was the opening price</span><span style="color:var(--emerald);font-size:11px;margin-left:auto">1.02% · ↑134%</span></div>
+      <div class="br"><span class="kw">schd dividend history</span><span style="color:var(--sub);font-size:11px;margin-left:auto">0.72% · ↑16%</span></div>
+      <div class="br"><span class="kw">jepi dividend history</span><span style="color:var(--emerald);font-size:11px;margin-left:auto">0.63% · ↑94%</span></div>
+      <div class="br"><span class="kw">anthropic stock</span><span style="color:var(--emerald);font-size:11px;margin-left:auto">0.59% · ↑117%</span></div>
+    </div>
+    <div class="card ci">
+      <div class="ct" style="color:var(--d1)">Investing.com — Top Non-Branded Keywords</div>
+      <div class="cs">Multilingual penetration — unique competitive advantage in the category</div>
+      <div class="br"><span class="kw">brent petrol 🇹🇷</span><span style="color:var(--rose);font-size:11px;margin-left:auto">4.53% · ↓23%</span></div>
+      <div class="br"><span class="kw">giá vàng thế giới 🇻🇳</span><span style="color:var(--rose);font-size:11px;margin-left:auto">1.73% · ↓56%</span></div>
+      <div class="br"><span class="kw">gümüş gram 🇹🇷</span><span style="color:var(--rose);font-size:11px;margin-left:auto">0.90% · ↓27%</span></div>
+      <div class="br"><span class="kw">dolar hoje 🇧🇷</span><span style="color:var(--emerald);font-size:11px;margin-left:auto">0.89% · ↑178%</span></div>
+      <div class="br"><span class="kw">crude oil price</span><span style="color:var(--rose);font-size:11px;margin-left:auto">0.87% · ↓53%</span></div>
+    </div>
+    <div class="card ci">
+      <div class="ct" style="color:var(--d4)">TradingView — Top Non-Branded Keywords</div>
+      <div class="cs">India-heavy traffic + global commodities and crypto queries</div>
+      <div class="br"><span class="kw">gift nifty 🇮🇳</span><span style="color:var(--rose);font-size:11px;margin-left:auto">6.03% · ↓3%</span></div>
+      <div class="br"><span class="kw">btc usd</span><span style="color:var(--rose);font-size:11px;margin-left:auto">2.36% · ↓19%</span></div>
+      <div class="br"><span class="kw">gift nifty live 🇮🇳</span><span style="color:var(--emerald);font-size:11px;margin-left:auto">1.32% · ↑15%</span></div>
+      <div class="br"><span class="kw">altın grafik 🇹🇷</span><span style="color:var(--emerald);font-size:11px;margin-left:auto">1.20% · ↑9%</span></div>
+      <div class="br"><span class="kw">ons altın 🇹🇷</span><span style="color:var(--rose);font-size:11px;margin-left:auto">1.03% · ↓51%</span></div>
+    </div>
+    <div class="card ci">
+      <div class="ct" style="color:var(--d8)">CoinMarketCap — Top Non-Branded Keywords</div>
+      <div class="cs">Crypto-only universe — requires completely separate SEO strategy</div>
+      <div class="br"><span class="kw">xrp</span><span style="color:var(--rose);font-size:11px;margin-left:auto">2.55% · ↓40%</span></div>
+      <div class="br"><span class="kw">xrp price</span><span style="color:var(--rose);font-size:11px;margin-left:auto">1.57% · ↓19%</span></div>
+      <div class="br"><span class="kw">eth</span><span style="color:var(--rose);font-size:11px;margin-left:auto">1.23% · ↓48%</span></div>
+      <div class="br"><span class="kw">blockdag</span><span style="color:var(--rose);font-size:11px;margin-left:auto">1.22% · ↓20%</span></div>
+      <div class="br"><span class="kw">solana price</span><span style="color:var(--rose);font-size:11px;margin-left:auto">1.20%</span></div>
+    </div>
+    <div class="card ci">
+      <div class="ct" style="color:var(--d6)">Barchart — Top Non-Branded Keywords</div>
+      <div class="cs">Commodities + anomalous Dolphin Radar viral spillover</div>
+      <div class="br"><span class="kw">qqq</span><span style="color:var(--emerald);font-size:11px;margin-left:auto">2.98% · ↑159%</span></div>
+      <div class="br"><span class="kw">crude oil price</span><span style="color:var(--emerald);font-size:11px;margin-left:auto">2.98% · ↑120%</span></div>
+      <div class="br"><span class="kw">oil futures</span><span style="color:var(--rose);font-size:11px;margin-left:auto">1.56% · ↓56%</span></div>
+      <div class="br"><span class="kw">dolphinradar 🐬</span><span style="color:var(--emerald);font-size:11px;margin-left:auto">1.53% · ↑154%</span></div>
+      <div class="br"><span class="kw">dolphin radar</span><span style="color:var(--rose);font-size:11px;margin-left:auto">1.26% · ↓58%</span></div>
+    </div>
+    <div class="card ci">
+      <div class="ct" style="color:var(--d5)">SeekingAlpha — Top Non-Branded Keywords</div>
+      <div class="cs">High-intent stock research queries — subscribed investor audience</div>
+      <div class="br"><span class="kw">s&p 500</span><span style="color:var(--sub);font-size:11px;margin-left:auto">#1</span></div>
+      <div class="br"><span class="kw">sp500</span><span style="color:var(--sub);font-size:11px;margin-left:auto">#2</span></div>
+      <div class="br"><span class="kw">palantir stock</span><span style="color:var(--sub);font-size:11px;margin-left:auto">#3</span></div>
+      <div class="br"><span class="kw">amd stock</span><span style="color:var(--sub);font-size:11px;margin-left:auto">#4</span></div>
+      <div class="br"><span class="kw">spy stock</span><span style="color:var(--sub);font-size:11px;margin-left:auto">#5</span></div>
+    </div>
+  </div>
+
+  <div class="card ci">
+    <div class="ct">Organic Search Share — All Domains</div>
+    <div class="cs">Investing.com leads (36.48%) but that same dependency is the greatest algorithmic risk</div>
+    <div class="br"><span class="bl">Investing.com</span><div class="bt"><div class="bf" style="width:100%;background:var(--d1)"></div></div><span class="bv" style="color:var(--d1)">36.48%</span></div>
+    <div class="br"><span class="bl">StockAnalysis</span><div class="bt"><div class="bf" style="width:82.9%;background:var(--d7)"></div></div><span class="bv" style="color:var(--d7)">30.24%</span></div>
+    <div class="br"><span class="bl">Yahoo Finance</span><div class="bt"><div class="bf" style="width:76.4%;background:var(--d2)"></div></div><span class="bv" style="color:var(--d2)">27.88%</span></div>
+    <div class="br"><span class="bl">Barchart</span><div class="bt"><div class="bf" style="width:58.2%;background:var(--d6)"></div></div><span class="bv" style="color:var(--d6)">21.25%</span></div>
+    <div class="br"><span class="bl">MarketWatch</span><div class="bt"><div class="bf" style="width:55.3%;background:var(--d3)"></div></div><span class="bv" style="color:var(--d3)">20.16%</span></div>
+    <div class="br"><span class="bl">CoinMarketCap</span><div class="bt"><div class="bf" style="width:53.2%;background:var(--d8)"></div></div><span class="bv" style="color:var(--d8)">19.39%</span></div>
+    <div class="br"><span class="bl">SeekingAlpha</span><div class="bt"><div class="bf" style="width:47.3%;background:var(--d5)"></div></div><span class="bv" style="color:var(--d5)">17.25%</span></div>
+    <div class="br"><span class="bl">TradingView</span><div class="bt"><div class="bf" style="width:43.9%;background:var(--d4)"></div></div><span class="bv" style="color:var(--d4)">16.01%</span></div>
+  </div>
+</div>
+
+<!-- ═══════════ REFERRALS ═══════════ -->
+<div id="tab-referrals" class="tab-panel section">
+  <h2 class="sh">Referral Ecosystem & Digital PR</h2>
+  <p class="ss">Inbound referral sources, concentration risk, strategic partnership opportunities</p>
+
+  <div class="card ci" style="margin-bottom:12px">
+    <div class="ct">Absolute Referral Traffic Volume</div>
+    <div class="cs">Yahoo Finance internal ecosystem dwarfs all competitors combined (101.3M referral visits)</div>
+    <div class="br"><span class="bl">Yahoo Finance</span><div class="bt"><div class="bf" style="width:100%;background:var(--d2)"></div></div><span class="bv" style="color:var(--d2)">101.3M</span></div>
+    <div class="br"><span class="bl">TradingView</span><div class="bt"><div class="bf" style="width:22.8%;background:var(--d4)"></div></div><span class="bv" style="color:var(--d4)">23.07M</span></div>
+    <div class="br"><span class="bl">Investing.com</span><div class="bt"><div class="bf" style="width:20.4%;background:var(--d1)"></div></div><span class="bv" style="color:var(--d1)">20.71M</span></div>
+    <div class="br"><span class="bl">CoinMktCap</span><div class="bt"><div class="bf" style="width:5.7%;background:var(--d8)"></div></div><span class="bv" style="color:var(--d8)">5.78M</span></div>
+    <div class="br"><span class="bl">MarketWatch</span><div class="bt"><div class="bf" style="width:3.3%;background:var(--d3)"></div></div><span class="bv" style="color:var(--d3)">3.32M</span></div>
+    <div class="br"><span class="bl">SeekingAlpha</span><div class="bt"><div class="bf" style="width:3.2%;background:var(--d5)"></div></div><span class="bv" style="color:var(--d5)">3.22M</span></div>
+    <div class="br"><span class="bl">StockAnalysis</span><div class="bt"><div class="bf" style="width:0.94%;background:var(--d7)"></div></div><span class="bv" style="color:var(--d7)">949K</span></div>
+    <div class="br"><span class="bl">Barchart</span><div class="bt"><div class="bf" style="width:0.87%;background:var(--d6)"></div></div><span class="bv" style="color:var(--d6)">878K</span></div>
+  </div>
+
+  <div class="card" style="margin-bottom:12px">
+    <div class="ci"><div class="ct">Top Referring Domains by Competitor</div><div class="cs">Top 5 sources and their share of each domain's referral traffic</div></div>
+    <div style="overflow-x:auto">
+    <table class="dt">
+      <thead><tr><th>Domain</th><th>#1 Referrer</th><th class="nr">Share</th><th>#2</th><th class="nr">Share</th><th>#3 Referrer</th><th class="nr">Share</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d2)"></span>Yahoo Finance</span></td>
+          <td style="color:var(--violet)">yahoo.com 🔒 internal</td><td class="nr viol">82.59%</td>
+          <td>consent.yahoo.com</td><td class="nr">10.11%</td><td>news.yahoo.com</td><td class="nr">8.28%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d3)"></span>MarketWatch</span></td>
+          <td style="color:var(--rose)">drudgereport.com ⚠</td><td class="nr warn">31.56%</td>
+          <td>wsj.com</td><td class="nr">19.14%</td><td>finviz.com</td><td class="nr">10.25%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d4)"></span>TradingView</span></td>
+          <td>tradovate.com</td><td class="nr hl">22.34%</td>
+          <td>msn.com</td><td class="nr">7.13%</td><td>chartink.com</td><td class="nr">3.32%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d5)"></span>SeekingAlpha</span></td>
+          <td>stockanalysis.com</td><td class="nr acc">25.93%</td>
+          <td>robinhood.com</td><td class="nr">9.28%</td><td>msn.com</td><td class="nr">5.99%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d6)"></span>Barchart</span></td>
+          <td>yahoo.com</td><td class="nr hl">37.21%</td>
+          <td>shesaidyes.com</td><td class="nr">4.36%</td><td>abnewswire.com</td><td class="nr">4.29%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d1)"></span>Investing.com</span></td>
+          <td>msn.com</td><td class="nr">5.03%</td>
+          <td>yandex.ru</td><td class="nr">4.18%</td><td>yahoo.com</td><td class="nr">4.00%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d7)"></span>StockAnalysis</span></td>
+          <td>knoji.com</td><td class="nr">13.44%</td>
+          <td>yahoo.com</td><td class="nr">8.50%</td><td>google.com</td><td class="nr">5.99%</td></tr>
+        <tr><td><span class="dbadge"><span class="dot" style="background:var(--d8)"></span>CoinMarketCap</span></td>
+          <td>whitebit.com</td><td class="nr">24.40%</td>
+          <td>gate.com</td><td class="nr">5.35%</td><td>msn.com</td><td class="nr">2.85%</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card ci">
+    <div class="ct">Referral Concentration Risk Index</div>
+    <div class="cs">Share of #1 referrer in total referral traffic — higher = more vulnerable to single-source disruption</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+      <div class="br"><span class="bl" style="color:var(--violet)">Yahoo Finance</span><div class="bt"><div class="bf" style="width:82.59%;background:var(--violet)"></div></div><span class="bv viol" style="font-weight:700">82.59%</span></div>
+      <div class="br"><span class="bl" style="color:var(--amber)">Barchart</span><div class="bt"><div class="bf" style="width:37.21%;background:var(--amber)"></div></div><span class="bv hl">37.21%</span></div>
+      <div class="br"><span class="bl" style="color:var(--rose)">MarketWatch</span><div class="bt"><div class="bf" style="width:31.56%;background:var(--rose)"></div></div><span class="bv warn">31.56%</span></div>
+      <div class="br"><span class="bl" style="color:var(--amber)">SeekingAlpha</span><div class="bt"><div class="bf" style="width:25.93%;background:var(--amber)"></div></div><span class="bv hl">25.93%</span></div>
+      <div class="br"><span class="bl" style="color:var(--amber)">CoinMktCap</span><div class="bt"><div class="bf" style="width:24.40%;background:var(--amber)"></div></div><span class="bv hl">24.40%</span></div>
+      <div class="br"><span class="bl" style="color:var(--amber)">TradingView</span><div class="bt"><div class="bf" style="width:22.34%;background:var(--amber)"></div></div><span class="bv hl">22.34%</span></div>
+      <div class="br"><span class="bl" style="color:var(--emerald)">StockAnalysis</span><div class="bt"><div class="bf" style="width:13.44%;background:var(--emerald)"></div></div><span class="bv good">13.44%</span></div>
+      <div class="br"><span class="bl" style="color:var(--emerald)">Investing.com</span><div class="bt"><div class="bf" style="width:5.03%;background:var(--emerald)"></div></div><span class="bv good">5.03%</span></div>
+    </div>
+    <div style="margin-top:8px;font-size:11px;color:var(--dim)">🟢 &lt;15% diversified · 🟡 15–35% concentrated · 🔴 &gt;35% high risk · 🟣 closed-loop internal</div>
+  </div>
+</div>
+
+<!-- ═══════════ GEO ═══════════ -->
+<div id="tab-geo" class="tab-panel section">
+  <h2 class="sh">Geographic Traffic Distribution</h2>
+  <p class="ss">Top 5 countries per domain — regional audience profile and growth trends</p>
+
+  <div class="g2">
+    <div class="card ci"><div class="ct" style="color:var(--d1)">investing.com</div><div class="cs">Most geographically diversified in the category — no US dominance</div>
+      <div class="cr"><span>🇹🇷 Turkey</span><span style="color:var(--d1);font-weight:600">16.28%</span><span class="warn">↓14.93%</span></div>
+      <div class="cr"><span>🇮🇳 India</span><span>9.68%</span><span class="warn">↓30.04%</span></div>
+      <div class="cr"><span>🇮🇹 Italy</span><span>8.17%</span><span class="warn">↓6.57%</span></div>
+      <div class="cr"><span>🇰🇷 Korea</span><span>6.29%</span><span class="warn">↓27.50%</span></div>
+      <div class="cr"><span>🇪🇸 Spain</span><span>5.99%</span><span class="warn">↓23.48%</span></div>
+    </div>
+    <div class="card ci"><div class="ct" style="color:var(--d2)">finance.yahoo.com</div><div class="cs">US-centric with strong Anglosphere presence — stable geography</div>
+      <div class="cr"><span>🇺🇸 United States</span><span style="color:var(--d2);font-weight:600">62.45%</span><span class="good">↑0.48%</span></div>
+      <div class="cr"><span>🇨🇦 Canada</span><span>6.06%</span><span class="good">↑1.09%</span></div>
+      <div class="cr"><span>🇬🇧 United Kingdom</span><span>2.74%</span><span class="good">↑0.21%</span></div>
+      <div class="cr"><span>🇦🇺 Australia</span><span>1.85%</span><span class="warn">↓3.72%</span></div>
+      <div class="cr"><span>🇮🇳 India</span><span>1.82%</span><span class="warn">↓18.03%</span></div>
+    </div>
+    <div class="card ci"><div class="ct" style="color:var(--d4)">tradingview.com</div><div class="cs">India #1 — home of the world's largest retail trader base</div>
+      <div class="cr"><span>🇮🇳 India</span><span style="color:var(--d4);font-weight:600">21.20%</span><span class="warn">↓10.18%</span></div>
+      <div class="cr"><span>🇺🇸 United States</span><span>14.99%</span><span class="warn">↓9.49%</span></div>
+      <div class="cr"><span>🇹🇷 Turkey</span><span>5.58%</span><span class="warn">↓20.40%</span></div>
+      <div class="cr"><span>🇮🇩 Indonesia</span><span>3.25%</span><span class="warn">↓18.22%</span></div>
+      <div class="cr"><span>🇻🇳 Vietnam</span><span>2.92%</span><span class="warn">↓33.84%</span></div>
+    </div>
+    <div class="card ci"><div class="ct" style="color:var(--d8)">coinmarketcap.com</div><div class="cs">Globally distributed — crypto has no geographic home market</div>
+      <div class="cr"><span>🇺🇸 United States</span><span style="color:var(--d8);font-weight:600">21.03%</span><span class="warn">↓8.02%</span></div>
+      <div class="cr"><span>🇮🇳 India</span><span>6.34%</span><span class="warn">↓5.43%</span></div>
+      <div class="cr"><span>🇩🇪 Germany</span><span>4.71%</span><span class="warn">↓14.02%</span></div>
+      <div class="cr"><span>🇷🇺 Russia</span><span>4.23%</span><span class="warn">↓31.98%</span></div>
+      <div class="cr"><span>🇻🇳 Vietnam</span><span>3.88%</span><span class="warn">↓43.39%</span></div>
+    </div>
+    <div class="card ci"><div class="ct" style="color:var(--d3)">marketwatch.com</div><div class="cs">Predominantly US — local American financial brand</div>
+      <div class="cr"><span>🇺🇸 United States</span><span style="color:var(--d3);font-weight:600">67.97%</span><span class="warn">↓10.52%</span></div>
+      <div class="cr"><span>🇨🇦 Canada</span><span>7.17%</span><span class="warn">↓19.63%</span></div>
+      <div class="cr"><span>🇬🇧 United Kingdom</span><span>3.12%</span><span class="warn">↓9.79%</span></div>
+      <div class="cr"><span>🇮🇳 India</span><span>2.63%</span><span class="warn">↓26.56%</span></div>
+      <div class="cr"><span>🇦🇺 Australia</span><span>1.80%</span><span class="warn">↓28.06%</span></div>
+    </div>
+    <div class="card ci"><div class="ct" style="color:var(--d5)">seekingalpha.com</div><div class="cs">Subscribed US investors — most monetizable audience in the set</div>
+      <div class="cr"><span>🇺🇸 United States</span><span style="color:var(--d5);font-weight:600">68.54%</span><span class="warn">↓10.05%</span></div>
+      <div class="cr"><span>🇨🇦 Canada</span><span>5.86%</span><span class="warn">↓14.33%</span></div>
+      <div class="cr"><span>🇬🇧 United Kingdom</span><span>2.69%</span><span class="good">↑0.67%</span></div>
+      <div class="cr"><span>🇩🇪 Germany</span><span>2.53%</span><span class="warn">↓1.99%</span></div>
+      <div class="cr"><span>🇰🇷 Korea</span><span>1.44%</span><span class="warn">↓1.25%</span></div>
+    </div>
+    <div class="card ci"><div class="ct" style="color:var(--d6)">barchart.com</div><div class="cs">North America centric — commodities and options professional audience</div>
+      <div class="cr"><span>🇺🇸 United States</span><span style="color:var(--d6);font-weight:600">55.50%</span><span class="warn">↓9.14%</span></div>
+      <div class="cr"><span>🇨🇦 Canada</span><span>8.00%</span><span class="warn">↓18.46%</span></div>
+      <div class="cr"><span>🇮🇳 India</span><span>4.58%</span><span class="good">↑56.71%</span></div>
+      <div class="cr"><span>🇬🇧 United Kingdom</span><span>2.93%</span><span class="warn">↓26.77%</span></div>
+      <div class="cr"><span>🇮🇩 Indonesia</span><span>2.57%</span><span class="warn">↓57.42%</span></div>
+    </div>
+    <div class="card ci"><div class="ct" style="color:var(--d7)">stockanalysis.com</div><div class="cs">English-speaking markets growing — Israel and Australia anomalously gaining</div>
+      <div class="cr"><span>🇺🇸 United States</span><span style="color:var(--d7);font-weight:600">59.68%</span><span class="good">↑7.03%</span></div>
+      <div class="cr"><span>🇨🇦 Canada</span><span>11.11%</span><span class="good">↑12.84%</span></div>
+      <div class="cr"><span>🇮🇱 Israel</span><span>2.60%</span><span class="good">↑15.37%</span></div>
+      <div class="cr"><span>🇦🇺 Australia</span><span>2.10%</span><span class="good">↑37.55%</span></div>
+      <div class="cr"><span>🇸🇬 Singapore</span><span>2.06%</span><span class="warn">↓8.50%</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PROFILES ═══════════ -->
+<div id="tab-domains" class="tab-panel section">
+  <h2 class="sh">Competitor Profiles</h2>
+  <p class="ss">Full data card for each competitor with all metrics consolidated</p>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+
+    <div class="card ci" style="border-left:3px solid var(--d1)">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--d1);flex-shrink:0"></div>
+        <div><div style="font-size:17px;font-weight:600">investing.com</div><div style="font-size:11px;color:var(--sub)">Global #324 · Finance › Investing · No single dominant country</div></div>
+        <div style="margin-left:auto;text-align:right"><div style="font-size:22px;font-weight:700;color:var(--d1)">539.6M</div><div class="warn" style="font-size:12px;font-weight:600">↓ 20.54% — worst decline in category</div></div>
+      </div>
+      <div class="g4" style="margin-bottom:12px">
+        <div class="mb"><div class="l">Bounce Rate</div><div class="v warn">54.93%</div></div>
+        <div class="mb"><div class="l">Avg Duration</div><div class="v">4:33</div></div>
+        <div class="mb"><div class="l">Pages/Visit</div><div class="v warn">2.80</div><div class="s">lowest in set</div></div>
+        <div class="mb"><div class="l">Mobile share</div><div class="v warn">61.86%</div><div class="s">highest in set</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--sub);margin-bottom:6px">Organic Search: <strong style="color:var(--emerald)">36.48%</strong> (highest) · Direct: 52.22% · Email: <strong style="color:var(--rose)">0.97%</strong> (gap)</div>
+      <div><span class="kw">brent petrol 🇹🇷</span><span class="kw">giá vàng thế giới 🇻🇳</span><span class="kw">gümüş gram 🇹🇷</span><span class="kw">dolar hoje 🇧🇷</span><span class="kw">crude oil price</span></div>
+    </div>
+
+    <div class="card ci" style="border-left:3px solid var(--d4)">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--d4);flex-shrink:0"></div>
+        <div><div style="font-size:17px;font-weight:600">tradingview.com</div><div style="font-size:11px;color:var(--sub)">Global #111 · Industry rank #1 Investing · India-dominant</div></div>
+        <div style="margin-left:auto;text-align:right"><div style="font-size:22px;font-weight:700;color:var(--d4)">730.9M</div><div class="warn" style="font-size:12px">↓ 11.82%</div></div>
+      </div>
+      <div class="g4" style="margin-bottom:12px">
+        <div class="mb"><div class="l">Bounce Rate</div><div class="v">47.63%</div></div>
+        <div class="mb"><div class="l">Avg Duration</div><div class="v">4:27</div></div>
+        <div class="mb"><div class="l">Pages/Visit</div><div class="v good" style="font-weight:700">8.65</div><div class="s">best in set</div></div>
+        <div class="mb"><div class="l">Desktop</div><div class="v good">73.53%</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--sub);margin-bottom:6px">Direct: <strong style="color:var(--amber)">69.14%</strong> · Social: 8.18% · Gen AI: 0.59% · Branded: <strong style="color:var(--rose)">48%</strong></div>
+      <div><span class="kw">gift nifty 🇮🇳</span><span class="kw">btc usd</span><span class="kw">altın grafik 🇹🇷</span><span class="kw">ons altın 🇹🇷</span></div>
+    </div>
+
+    <div class="card ci" style="border-left:3px solid var(--emerald)">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--emerald);flex-shrink:0"></div>
+        <div><div style="font-size:17px;font-weight:600">stockanalysis.com</div><div style="font-size:11px;color:var(--sub)">Global #6,148 · US #2,038 · Industry #79 — the only grower</div></div>
+        <div style="margin-left:auto;text-align:right"><div style="font-size:22px;font-weight:700;color:var(--emerald)">23.72M</div><div class="good" style="font-size:12px;font-weight:700">↑ 5.73% — ONLY DOMAIN GROWING</div></div>
+      </div>
+      <div class="g4" style="margin-bottom:12px">
+        <div class="mb"><div class="l">Bounce Rate</div><div class="v good" style="font-weight:700">38.97%</div><div class="s">best in set</div></div>
+        <div class="mb"><div class="l">Avg Duration</div><div class="v good">6:55</div></div>
+        <div class="mb"><div class="l">Pages/Visit</div><div class="v good">6.05</div></div>
+        <div class="mb"><div class="l">Gen AI traffic</div><div class="v acc">1.02%</div><div class="s">2nd highest</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--sub);margin-bottom:6px">Organic: <strong style="color:var(--emerald)">30.24%</strong> · Non-branded: <strong>75%</strong> · Gen AI: 1.02%</div>
+      <div><span class="kw">qqqi dividend history ↑215%</span><span class="kw">schd dividend history</span><span class="kw">jepi dividend history ↑94%</span><span class="kw">anthropic stock ↑117%</span></div>
+    </div>
+
+    <div class="card ci" style="border-left:3px solid var(--d5)">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--d5);flex-shrink:0"></div>
+        <div><div style="font-size:17px;font-weight:600">seekingalpha.com</div><div style="font-size:11px;color:var(--sub)">Global #2,667 · #1 paid financial media product</div></div>
+        <div style="margin-left:auto;text-align:right"><div style="font-size:22px;font-weight:700;color:var(--d5)">55.54M</div><div class="warn" style="font-size:12px">↓ 9.61%</div></div>
+      </div>
+      <div class="g4" style="margin-bottom:12px">
+        <div class="mb"><div class="l">Email channel</div><div class="v" style="color:var(--rose);font-weight:700">12.44%</div><div class="s">10× higher than peers</div></div>
+        <div class="mb"><div class="l">Bounce Rate</div><div class="v good">41.42%</div></div>
+        <div class="mb"><div class="l">Avg Duration</div><div class="v">5:11</div></div>
+        <div class="mb"><div class="l">Paid Search</div><div class="v">4.09%</div><div class="s">only PPC user</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--sub)">Branded: 12% · Non-branded: 88% · stockanalysis.com = 25.93% of referrals</div>
+    </div>
+
+    <div class="card ci" style="border-left:3px solid var(--d6)">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--d6);flex-shrink:0"></div>
+        <div><div style="font-size:17px;font-weight:600">barchart.com</div><div style="font-size:11px;color:var(--sub)">Global #6,197 · US #2,136 · Professional trading terminal</div></div>
+        <div style="margin-left:auto;text-align:right"><div style="font-size:22px;font-weight:700;color:var(--d6)">25.29M</div><div class="warn" style="font-size:12px">↓ 10.10%</div></div>
+      </div>
+      <div class="g4" style="margin-bottom:12px">
+        <div class="mb"><div class="l">Avg Duration</div><div class="v acc" style="font-weight:700">21:07</div><div class="s">professional terminal signal</div></div>
+        <div class="mb"><div class="l">Bounce Rate</div><div class="v good">43.97%</div></div>
+        <div class="mb"><div class="l">Gen AI</div><div class="v acc" style="font-weight:700">1.37%</div><div class="s">category leader</div></div>
+        <div class="mb"><div class="l">Desktop</div><div class="v">67.04%</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--sub)">Branded: 21% · Non-branded: 79% · Top keyword: qqq +159%, crude oil price +120%</div>
+    </div>
+
+    <div class="card ci" style="border-left:3px solid var(--d8)">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--d8);flex-shrink:0"></div>
+        <div><div style="font-size:17px;font-weight:600">coinmarketcap.com</div><div style="font-size:11px;color:var(--sub)">Global #1,508 · #1 Crypto & Blockchain — isolated ecosystem</div></div>
+        <div style="margin-left:auto;text-align:right"><div style="font-size:22px;font-weight:700;color:var(--d8)">156.1M</div><div class="warn" style="font-size:12px">↓ 12.27%</div></div>
+      </div>
+      <div class="g4" style="margin-bottom:12px">
+        <div class="mb"><div class="l">Bounce Rate</div><div class="v warn">57.34%</div></div>
+        <div class="mb"><div class="l">Avg Duration</div><div class="v warn">3:17</div><div class="s">minimum in set</div></div>
+        <div class="mb"><div class="l">Pages/Visit</div><div class="v warn">2.34</div></div>
+        <div class="mb"><div class="l">Branded</div><div class="v warn">61%</div><div class="s">high brand dependency</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--sub)">Top referrers: whitebit.com 24.4%, gate.com 5.35% — all crypto exchanges · Top keywords: xrp, eth, solana price</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ INSIGHTS ═══════════ -->
+<div id="tab-insights" class="tab-panel section">
+  <h2 class="sh">Tier-1 Agency Strategic Insights</h2>
+  <p class="ss">Head of SEO level findings — derived exclusively from SimilarWeb data</p>
+
+  <div class="insight-box">
+    <div class="insight-hdr">🔴 Critical Issues</div>
+    <div class="insight-item">
+      <div class="ii-icon" style="background:rgba(244,63,94,.12);color:var(--rose)">⚠</div>
+      <div class="ii-body"><span class="ii-title" style="color:var(--rose)">Investing.com: -20.54% — worst traffic decline in the category.</span> With 61.86% mobile traffic (maximum) yet only 2.80 pages/visit (minimum), the product is failing to convert its own mobile audience. Email channel sits at 0.97% against SeekingAlpha's 12.44%, revealing a structural retention deficit. Mobile Core Web Vitals and email acquisition are immediate priorities #1 and #2.</div>
+    </div>
+    <div class="insight-item">
+      <div class="ii-icon" style="background:rgba(244,63,94,.12);color:var(--rose)">⚠</div>
+      <div class="ii-body"><span class="ii-title" style="color:var(--rose)">MarketWatch: 31.56% of referral traffic from DrudgeReport — a catastrophic single point of failure.</span> Combined with WSJ.com (19.14% — a Dow Jones sibling), the top two sources control 50%+ of all referrals. One editorial shift or algorithm change removes a third of referral traffic without warning. MarketWatch is not diversifying its Digital PR pipeline.</div>
+    </div>
+    <div class="insight-item">
+      <div class="ii-icon" style="background:rgba(244,63,94,.12);color:var(--rose)">⚠</div>
+      <div class="ii-body"><span class="ii-title" style="color:var(--rose)">CoinMarketCap: completely isolated from traditional finance.</span> 61% branded organic share + all top referrers are crypto exchanges (whitebit, gate, binance). Zero audience crossover with Yahoo Finance, MarketWatch, or Investing.com affinity lists. A fully separate SEO strategy, content taxonomy, and off-page plan is required. Traditional finance keywords will produce no results.</div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-hdr">🟡 Growth Opportunities</div>
+    <div class="insight-item">
+      <div class="ii-icon" style="background:rgba(245,158,11,.12);color:var(--amber)">💡</div>
+      <div class="ii-body"><span class="ii-title" style="color:var(--amber)">StockAnalysis — the only platform growing while the category contracts (+5.73%).</span> The dividend-history keyword cluster (qqqi +215%, jepi +94%, schd +16%) is a high-intent, low-competition niche that is fully replicable. StockAnalysis has simultaneously become the #1 referrer to SeekingAlpha (25.93%) — product-level cross-pollination that no paid campaign can replicate.</div>
+    </div>
+    <div class="insight-item">
+      <div class="ii-icon" style="background:rgba(245,158,11,.12);color:var(--amber)">💡</div>
+      <div class="ii-body"><span class="ii-title" style="color:var(--amber)">Gen AI traffic is measurable — Barchart (1.37%) and StockAnalysis (1.02%) are already capturing it.</span> chatgpt.com appears as a named referrer in the dataset. Structured, citable data pages (dividends, earnings tables, commodity prices) are significantly more likely to be cited by LLM responses. Domains without schema markup and clear data tables are losing this wave. AEO (Answer Engine Optimization) should become a standalone workstream in Q2 2026.</div>
+    </div>
+    <div class="insight-item">
+      <div class="ii-icon" style="background:rgba(245,158,11,.12);color:var(--amber)">💡</div>
+      <div class="ii-body"><span class="ii-title" style="color:var(--amber)">MSN.com is the most undervalued referral lever in financial media.</span> It appears as a significant referrer for Investing (5.03%), TradingView (7.13%), SeekingAlpha (5.99%), and CoinMarketCap (2.85%) — no other external domain achieves this cross-competitor penetration. A single MSN Money content partnership simultaneously reaches all four audience segments. Consistently overlooked in standard agency link-building playbooks.</div>
+    </div>
+    <div class="insight-item">
+      <div class="ii-icon" style="background:rgba(245,158,11,.12);color:var(--amber)">💡</div>
+      <div class="ii-body"><span class="ii-title" style="color:var(--amber)">SeekingAlpha's 12.44% email channel is not a newsletter metric — it is retention infrastructure.</span> Gmail alone drives 10.07% of total traffic. This means subscribers return daily, organically, independent of Google. SeekingAlpha is the only domain in this set with a paid subscription product, and this data proves the monetization effectiveness of an email-owned audience. For any financial media platform: absence of an email program is a structural gap.</div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-hdr">🟢 C-Suite Strategic Conclusions</div>
+    <div class="insight-item">
+      <div class="ii-icon" style="background:rgba(16,185,129,.12);color:var(--emerald)">✓</div>
+      <div class="ii-body"><span class="ii-title" style="color:var(--emerald)">Yahoo Finance's closed referral loop is structurally unassailable.</span> 101.3M referral visits vs 20.71M for Investing.com — driven almost entirely by Yahoo-owned properties. Only finviz.com (2.57%) breaks through as an external source. No PR campaign can replicate Yahoo's internal amplification flywheel. Competing for referral traffic from Yahoo Finance is futile; the strategic focus must be organic and direct channel differentiation.</div>
+    </div>
+    <div class="insight-item">
+      <div class="ii-icon" style="background:rgba(16,185,129,.12);color:var(--emerald)">✓</div>
+      <div class="ii-body"><span class="ii-title" style="color:var(--emerald)">TradingView is the only cross-cluster bridge between traditional finance and crypto.</span> It appears in affinity lists for both mainstream financial platforms and CoinMarketCap — no other domain achieves this. At 8.65 pages/visit and 69.14% direct traffic, it has the deepest engagement and strongest brand moat. A content integration or data partnership with TradingView grants simultaneous access to both market segments.</div>
+    </div>
+    <div class="insight-item">
+      <div class="ii-icon" style="background:rgba(16,185,129,.12);color:var(--emerald)">✓</div>
+      <div class="ii-body"><span class="ii-title" style="color:var(--emerald)">The entire category is contracting — except StockAnalysis.</span> Investing.com -20.54%, CoinMktCap -12.27%, TradingView -11.82%, MarketWatch -11.61%, Barchart -10.10%, SeekingAlpha -9.61%, Yahoo Finance -1.49%. This is a systemic audience redistribution, not individual platform failures. StockAnalysis (+5.73%) wins through niche SEO, not brand — which is a fully reproducible strategy for any competitor willing to invest in structured content at scale.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-brand">
+      <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+        <rect width="24" height="24" rx="6" fill="#6366F1" fill-opacity="0.15"/>
+        <path d="M5 17L9 12L12 15L16 9L19 12" stroke="#6366F1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="19" cy="12" r="1.5" fill="#10B981"/>
+      </svg>
+      <span style="font-size:13px;font-weight:600;color:var(--sub)">Analytics by TakeProfit Team</span>
+      <span style="color:var(--border)">·</span>
+      <span style="font-size:12px;color:var(--dim)">Data: SimilarWeb Pro</span>
+    </div>
+    <p>Feb–Apr 2026 · 8 domains analyzed · Worldwide · All Traffic · Report date: May 26, 2026</p>
+    <p style="margin-top:4px">All data rights belong to SimilarWeb LTD. Report for internal analytical use only.</p>
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+Chart.defaults.color = '#7A9AC0';
+Chart.defaults.borderColor = '#1C2E48';
+Chart.defaults.font.family = 'Inter,-apple-system,sans-serif';
+Chart.defaults.font.size = 11;
+
+// Traffic volume chart
+new Chart(document.getElementById('trafficChart').getContext('2d'), {
+  type: 'bar',
+  data: {
+    labels: ['TradingView','Yahoo Fin.','Investing','CoinMktCap','MarketWatch','SeekingAlpha','Barchart','StockAnalysis'],
+    datasets: [{
+      data: [730.9, 642.2, 539.6, 156.1, 100.7, 55.54, 25.29, 23.72],
+      backgroundColor: ['#EF4444','#F59E0B','#6366F1','#06B6D4','#10B981','#F97316','#22D3EE','#8B5CF6'],
+      borderRadius: 4, borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.raw}M visits` } } },
+    scales: {
+      x: { grid: { color: '#1C2E48' }, ticks: { color: '#7A9AC0' } },
+      y: { grid: { color: '#1C2E48' }, ticks: { color: '#7A9AC0', callback: v => v + 'M' } }
+    }
+  }
+});
+
+// Change chart
+new Chart(document.getElementById('changeChart').getContext('2d'), {
+  type: 'bar',
+  data: {
+    labels: ['StockAnalysis','Yahoo Fin.','SeekingAlpha','Barchart','MarketWatch','TradingView','CoinMktCap','Investing'],
+    datasets: [{
+      data: [5.73, -1.49, -9.61, -10.1, -11.61, -11.82, -12.27, -20.54],
+      backgroundColor: [5.73,-1.49,-9.61,-10.1,-11.61,-11.82,-12.27,-20.54].map(v => v >= 0 ? 'rgba(16,185,129,0.82)' : 'rgba(244,63,94,0.72)'),
+      borderRadius: 3, borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.raw}%` } } },
+    scales: {
+      x: { grid: { color: '#1C2E48' }, ticks: { color: '#7A9AC0', callback: v => v + '%' } },
+      y: { grid: { display: false }, ticks: { color: '#7A9AC0' } }
+    }
+  }
+});
+
+// Monthly chart
+new Chart(document.getElementById('monthlyChart').getContext('2d'), {
+  type: 'line',
+  data: {
+    labels: ['Feb 2026', 'Mar 2026', 'Apr 2026'],
+    datasets: [{
+      label: 'StockAnalysis.com (M visits)',
+      data: [8.11, 7.59, 8.03],
+      borderColor: '#8B5CF6', backgroundColor: 'rgba(139,92,246,0.08)',
+      tension: 0.4, fill: true, pointRadius: 5, pointBackgroundColor: '#8B5CF6',
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#7A9AC0', boxWidth: 10 } }, tooltip: { callbacks: { label: c => ` ${c.raw}M visits` } } },
+    scales: {
+      x: { grid: { color: '#1C2E48' }, ticks: { color: '#7A9AC0' } },
+      y: { grid: { color: '#1C2E48' }, ticks: { color: '#7A9AC0', callback: v => v + 'M' }, min: 7 }
+    }
+  }
+});
+
+// Channel chart — FIXED: maintainAspectRatio:false + wrapper has explicit px height
+new Chart(document.getElementById('channelChart').getContext('2d'), {
+  type: 'bar',
+  data: {
+    labels: ['TradingView','MarketWatch','CoinMktCap','Barchart','StockAnalysis','SeekingAlpha','Investing','Yahoo Fin.'],
+    datasets: [
+      { label:'Direct',     data:[69.14,68.15,66.60,61.28,60.51,54.21,52.22,50.40], backgroundColor:'rgba(99,102,241,0.85)',  stack:'s' },
+      { label:'Organic',    data:[16.01,20.16,19.39,21.25,30.24,17.25,36.48,27.88], backgroundColor:'rgba(16,185,129,0.85)',  stack:'s' },
+      { label:'Social',     data:[8.18, 2.96, 6.96, 8.61, 2.90, 2.28, 4.70, 2.85], backgroundColor:'rgba(139,92,246,0.80)',  stack:'s' },
+      { label:'Referrals',  data:[3.16, 3.30, 3.70, 3.47, 4.00, 5.80, 3.84,15.78], backgroundColor:'rgba(244,63,94,0.75)',   stack:'s' },
+      { label:'Email',      data:[1.41, 2.25, 1.81, 3.41, 1.12,12.44, 0.97, 2.48], backgroundColor:'rgba(34,211,238,0.78)',  stack:'s' },
+      { label:'Paid Srch',  data:[0.30, 0.33, 0.01, 0.02, 0.02, 4.09, 0.70, 0.02], backgroundColor:'rgba(245,158,11,0.78)',  stack:'s' },
+      { label:'Gen AI',     data:[0.59, 0.39, 0.52, 1.37, 1.02, 0.42, 0.44, 0.30], backgroundColor:'rgba(6,182,212,0.72)',   stack:'s' },
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { color: '#7A9AC0', padding: 10, boxWidth: 11, font: { size: 11 } } },
+      tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${c.raw.toFixed(2)}%` } }
+    },
+    scales: {
+      x: { stacked: true, grid: { color: '#1C2E48' }, ticks: { color: '#7A9AC0', maxRotation: 30 } },
+      y: { stacked: true, grid: { color: '#1C2E48' }, max: 100,
+           ticks: { color: '#7A9AC0', callback: v => v + '%' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
